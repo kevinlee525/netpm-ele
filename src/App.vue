@@ -20,7 +20,9 @@ import Header from 'components/content/header/Header'
 <style>
   @import "assets/css/base.css";
   .body-show {
-    /*margin-top: 60px;*/
+    position: relative;
+    background-color: #eeeeee;
+    height: 700px;
   }
 
 </style>
