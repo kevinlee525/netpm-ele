@@ -1,6 +1,6 @@
 <template>
     <el-menu
-            :default-active="activeIndex2"
+            :default-active="currentPath"
             class="el-menu-demo"
             mode="horizontal"
             @select="handleSelect"
@@ -9,8 +9,9 @@
             active-text-color="#ffd04b"
             router>
         <el-menu-item>NetPM</el-menu-item>
-        <el-menu-item index="home">Home</el-menu-item>
-        <el-menu-item index="netdevice">Netdevice</el-menu-item>
+        <el-menu-item v-for="(item,index) in paths" :key="index" :index="item.name">
+            {{item.name}}
+        </el-menu-item>
         <el-submenu index="">
             <template slot="title">友情链接</template>
             <el-menu-item index="" @click="See01">流量气象图</el-menu-item>
@@ -28,9 +29,19 @@
         name: "Header",
         data() {
             return {
-                activeIndex: '1',
-                activeIndex2: '1'
+                currentPath:'home',
+                paths:[
+                    {name:'home',path:'/home'},
+                    {name:'netdevice',path:'/netdevice'}
+                ]
             };
+        },
+        created(){
+            this.paths.forEach((item)=>{
+                if (this.$route.path == item.path){
+                    this.currentPath = item.name
+                }
+            })
         },
         methods: {
             handleSelect(key, keyPath) {
