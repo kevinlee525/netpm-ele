@@ -9,6 +9,8 @@ import {
     Dropdown,
     DropdownMenu,
     DropdownItem,
+    Table,
+    TableColumn,
     }
     from 'element-ui'
 Vue.use(Menu)
@@ -20,3 +22,5 @@ Vue.use(Button)
 Vue.use(Dropdown)
 Vue.use(DropdownMenu)
 Vue.use(DropdownItem)
+Vue.use(Table)
+Vue.use(TableColumn)
