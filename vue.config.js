@@ -12,5 +12,9 @@ module.exports = {
         }
     },
     // outputDir: 'static',
-    assetsDir: "static"
+    assetsDir: "static",
+    devServer : {
+        // "port": 8888,
+        "open": true,
+    }
 }

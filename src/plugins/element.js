@@ -8,7 +8,8 @@ import {
     Button,
     Dropdown,
     DropdownMenu,
-    DropdownItem}
+    DropdownItem,
+    }
     from 'element-ui'
 Vue.use(Menu)
 Vue.use(Submenu)
