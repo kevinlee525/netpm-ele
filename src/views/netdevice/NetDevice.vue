@@ -5,7 +5,8 @@
                       placeholder="请输入业务IP或管理IP"
                       v-model="ip"
                       clearable
-                      @blur="blur()">
+                      @blur="blur()"
+                      @clear="clearData">
             </el-input>
             <el-dropdown>
                 <el-button type="primary">
@@ -108,6 +109,9 @@
             // 表格样式设置
             rowClass() {
                 return 'text-align: center;'
+            },
+            clearData(){
+                this.tableData = [];
             }
         }
     }
