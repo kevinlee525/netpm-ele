@@ -20,6 +20,7 @@
             <el-menu-item index="" @click="See04">网络监控</el-menu-item>
             <el-menu-item index="" @click="See05">网络备份</el-menu-item>
             <el-menu-item index="" @click="See06">网络日志查询</el-menu-item>
+            <el-menu-item index="" @click="See07">链路质量</el-menu-item>
         </el-submenu>
     </el-menu>
 </template>
@@ -64,6 +65,12 @@
                 window.open('http://10.9.60.106:8000/')
             },
             See06(){
+                Message({
+                    message:'暂未上线!',
+                    type:'error'
+                })
+            },
+            See07(){
                 Message({
                     message:'暂未上线!',
                     type:'error'

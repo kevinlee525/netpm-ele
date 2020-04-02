@@ -6,7 +6,7 @@
                       v-model="ip"
                       clearable
                       @blur="blur()"
-                      @clear="clearData">
+                      @clear="clearData([])">
             </el-input>
             <el-dropdown>
                 <el-button type="primary">
@@ -49,13 +49,23 @@
     import {Message} from 'element-ui'
     import {getArp} from "network/netdevice/netdevice";
 
+    import {mapState,mapMutations} from 'vuex'
+
     export default {
         name: "NetDevice",
         data() {
             return {
                 ip: '',
-                tableData: []
             }
+        },
+        computed:{
+          // tableData(){
+          //     return this.$store.state.tableData
+          // }
+          //   ...mapState({
+          //       tableData:state => state.tableData
+          //   })
+            ...mapState(['tableData'])
         },
         methods: {
             async getarp() {
@@ -74,7 +84,8 @@
                             message:switchInfo.hostname + ' ' + switchInfo.ip,
                             type:'success'
                         });
-                        this.tableData = res
+
+                        this.$store.commit('udtableData',res)
                     }
                 } catch (e) {
                     Message({
@@ -112,9 +123,12 @@
             rowClass() {
                 return 'text-align: center;'
             },
-            clearData(){
-                this.tableData = [];
-            }
+            // clearData(){
+            //     this.$store.commit('udtableData',[])
+            // },
+            ...mapMutations({ //在方法里传递参数，会自动传递
+              clearData:'udtableData'
+            })
         }
     }
 </script>
@@ -126,12 +140,10 @@
         left: 15px;
         right: 15px;
         height: 650px;
-        /*background-color: darkcyan;*/
     }
 
     .header {
         margin: 0 auto;
         width: 400px;
-        /*height: 35px;*/
     }
 </style>
