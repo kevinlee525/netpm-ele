@@ -69,9 +69,11 @@
                             type: 'warning'
                         })
                     } else {
-                        // console.log(res)
-                        let mgtIp = res.pop()
-                        console.log(mgtIp)
+                        let switchInfo = res.pop();
+                        Message({
+                            message:switchInfo.hostname + ' ' + switchInfo.ip,
+                            type:'success'
+                        });
                         this.tableData = res
                     }
                 } catch (e) {
