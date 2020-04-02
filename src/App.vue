@@ -22,7 +22,7 @@ import Header from 'components/content/header/Header'
   .body-show {
     position: relative;
     background-color: #eeeeee;
-    height: 700px;
+    height: 710px;
   }
 
 </style>

@@ -2,14 +2,18 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import NetDevice from 'views/netdevice/NetDevice'
+import Home from 'views/home/Home'
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
     redirect:'/home',
-    // component: Home
+  },
+  {
+    path:'/home',
+    name:'Home',
+    component:Home
   },
   {
     path: '/netdevice',
