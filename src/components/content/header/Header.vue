@@ -25,6 +25,7 @@
 </template>
 
 <script>
+    import {Message} from 'element-ui'
     export default {
         name: "Header",
         data() {
@@ -63,7 +64,10 @@
                 window.open('http://10.9.60.106:8000/')
             },
             See06(){
-                alert('暂未上线！')
+                Message({
+                    message:'暂未上线!',
+                    type:'error'
+                })
             }
         }
     }
