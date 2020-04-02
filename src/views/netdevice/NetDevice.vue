@@ -37,8 +37,8 @@
                     >
             </el-table-column>
             <el-table-column
-                    prop="macAddr"
-                    label="macAddr">
+                    prop="ifName"
+                    label="ifName">
             </el-table-column>
         </el-table>
     </el-card>
