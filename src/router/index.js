@@ -2,18 +2,18 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import NetDevice from 'views/netdevice/NetDevice'
-import Home from 'views/home/Home'
+import DashBoard from 'views/dashboard/DashBoard'
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    redirect:'/home',
+    redirect:'/dashboard',
   },
   {
-    path:'/home',
-    name:'Home',
-    component:Home
+    path:'/dashboard',
+    name:'dashboard',
+    component:DashBoard
   },
   {
     path: '/netdevice',

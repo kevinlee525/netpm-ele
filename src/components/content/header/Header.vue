@@ -33,7 +33,7 @@
             return {
                 currentPath:'home',
                 paths:[
-                    {name:'home',path:'/home'},
+                    {name:'dashboard',path:'/dashboard'},
                     {name:'netdevice',path:'/netdevice'}
                 ]
             };
