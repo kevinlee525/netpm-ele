@@ -8,6 +8,7 @@ module.exports = {
                 'assets':'@/assets',
                 'common':'@/common',
                 'store':'@/store',
+                'plugins':'@/plugins'
             }
         }
     },
