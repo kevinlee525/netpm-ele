@@ -4,6 +4,7 @@
         <div class="left">
             <div class="panel bar">
                 <h2>DC01-BGP-PD</h2>
+                <div style="color: white;text-align: center">2020-03-28<->2020-04-04</div>
                 <div class="chart" ref="leftBar"></div>
                 <div class="panel-footer"></div>
             </div>
@@ -74,7 +75,7 @@
         name: "DashBoard",
         data(){
           return {
-              dc01_bgp_pd:[100, 520, 200, 334, 390, 330, 220]
+              // dc01_bgp_pd:[152.40, 172.45, 174.84, 184.36, 190.90, 191.67, 174.42]
           }
         },
         mounted() {
@@ -147,7 +148,7 @@
                             name: '峰值带宽',
                             type: 'bar',
                             barWidth: '35%',
-                            data: this.dc01_bgp_pd,
+                            data: this.$store.state.dc01_bgp_pd,
                             itemStyle: {
                                 // 修改柱子圆角
                                 barBorderRadius: 5
