@@ -71,10 +71,7 @@
                 })
             },
             See07(){
-                Message({
-                    message:'暂未上线!',
-                    type:'error'
-                })
+                window.open('http://10.9.60.108/smokeping')
             }
         }
     }
