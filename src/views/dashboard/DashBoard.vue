@@ -4,7 +4,19 @@
         <div class="left">
             <div class="panel bar">
                 <h2>DC01-BGP-PD</h2>
-                <div style="color: white;text-align: center">2020-03-28<->2020-04-04</div>
+                <div style="color: white;text-align: center">
+                    <el-date-picker
+                            v-model="value1"
+                            type="daterange"
+                            range-separator="至"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期"
+                            size="mini"
+                            style="width:230px"
+                            value-format="yyyy-MM-dd"
+                            @change="getDate">
+                    </el-date-picker>
+                </div>
                 <div class="chart" ref="leftBar"></div>
                 <div class="panel-footer"></div>
             </div>
@@ -75,7 +87,7 @@
         name: "DashBoard",
         data(){
           return {
-              // dc01_bgp_pd:[152.40, 172.45, 174.84, 184.36, 190.90, 191.67, 174.42]
+              value1:''
           }
         },
         mounted() {
@@ -189,6 +201,9 @@
                     ]
                 })
 
+            },
+            getDate(){
+                console.log(this.value1);
             }
         }
     }

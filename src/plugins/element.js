@@ -11,6 +11,7 @@ import {
     DropdownItem,
     Table,
     TableColumn,
+    DatePicker,
     }
     from 'element-ui'
 Vue.use(Menu)
@@ -24,3 +25,4 @@ Vue.use(DropdownMenu)
 Vue.use(DropdownItem)
 Vue.use(Table)
 Vue.use(TableColumn)
+Vue.use(DatePicker)
