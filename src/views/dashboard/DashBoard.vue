@@ -14,7 +14,8 @@
                             size="mini"
                             style="width:230px"
                             value-format="yyyy-MM-dd"
-                            @change="getDate">
+                            @change="getDate"
+                            :picker-options="pickerOptions">
                     </el-date-picker>
                 </div>
                 <div class="chart" ref="leftBar"></div>
@@ -87,7 +88,12 @@
         name: "DashBoard",
         data(){
           return {
-              value1:''
+              value1:'',
+              pickerOptions:{
+                  disabledDate(time) {
+                      return time.getTime() > Date.now();
+                  }
+              }
           }
         },
         mounted() {
