@@ -6,7 +6,7 @@
                 <h2>DC01-BGP-PD</h2>
                 <div style="color: white;text-align: center">
                     <el-date-picker
-                            v-model="value1"
+                            v-model="bwDate"
                             type="daterange"
                             range-separator="至"
                             start-placeholder="开始日期"
@@ -14,9 +14,9 @@
                             size="mini"
                             style="width:230px"
                             value-format="yyyy-MM-dd"
-                            @change="getDate"
                             :picker-options="pickerOptions">
                     </el-date-picker>
+                    <el-button size="mini" type="danger" :disabled="button" @click="getDate" style="margin-left: 3px">提交</el-button>
                 </div>
                 <div class="chart" ref="leftBar"></div>
                 <div class="panel-footer"></div>
@@ -83,12 +83,20 @@
     }
 
     import echarts from 'plugins/echarts'
+    import {getBW} from "network/dashboard/dashboard";
 
     export default {
         name: "DashBoard",
+        computed:{
+          button(){
+              if (!this.bwDate){
+                  return true
+              }else false
+          }
+        },
         data(){
           return {
-              value1:'',
+              bwDate:'',
               pickerOptions:{
                   disabledDate(time) {
                       return time.getTime() > Date.now();
@@ -208,8 +216,17 @@
                 })
 
             },
-            getDate(){
-                console.log(this.value1);
+            async getDate(){
+                let Datebj = {
+                    start:this.bwDate[0],
+                    stop:this.bwDate[1]
+                };
+               const {data:ret} = await getBW({
+                    url:'/bw/',
+                    method:'post',
+                    data:Datebj,
+                });
+                console.log(ret);
             }
         }
     }
