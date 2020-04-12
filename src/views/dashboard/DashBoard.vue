@@ -101,7 +101,81 @@
                   disabledDate(time) {
                       return time.getTime() > Date.now();
                   }
-              }
+              },
+              myChart01_option:{
+                  color: ['#2f89cf'],
+                  tooltip: {
+                      trigger: 'axis',
+                      axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                          type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                      }
+                  },
+                  grid: {
+                      top: '10%',
+                      left: '0%',
+                      right: '0%',
+                      bottom: '4%',
+                      containLabel: true
+                  },
+                  xAxis: [
+                      {
+                          type: 'category',
+                          data:[],
+                          // data: this.$store.state.bgp_pd_xAxis,
+                          axisTick: {
+                              alignWithLabel: true
+                          },
+                          axisLabel: {
+                              color: "rgba(255,255,255,.6)",
+                              fontSize: "12"
+                          },
+                          axisLine: {
+                              show: false
+                              // 如果想要设置单独的线条样式
+                              // lineStyle: {
+                              //     color: "rgba(255,255,255,.1)",
+                              //     width: 1,
+                              //     type: "solid"
+                              // }
+                          }
+                      }
+                  ],
+                  yAxis: [
+                      {
+                          type: 'value',
+                          axisLabel: {
+                              textStyle: {
+                                  color: "rgba(255,255,255,.6)",
+                                  fontSize: 12
+                              }
+                          },
+                          axisLine:{
+                              lineStyle:{
+                                  color: "rgba(255,255,255,.1)",
+                              }
+                          },
+                          splitLine: {
+                              lineStyle: {
+                                  color: "rgba(255,255,255,.1)"
+                              }
+                          }
+                      }
+                  ],
+                  series: [
+                      {
+                          name: '峰值带宽',
+                          type: 'bar',
+                          barWidth: '35%',
+                          // data: this.$store.state.dc01_bgp_pd,
+                          data:[],
+                          itemStyle: {
+                              // 修改柱子圆角
+                              barBorderRadius: 5
+                          }
+                      }
+                  ]
+              },
+              myChart01 : null
           }
         },
         mounted() {
@@ -110,78 +184,8 @@
         },
         methods: {
             draw() {
-                let myChart01 = echarts.init(this.$refs.leftBar)
-                myChart01.setOption({
-                    color: ['#2f89cf'],
-                    tooltip: {
-                        trigger: 'axis',
-                        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
-                            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-                        }
-                    },
-                    grid: {
-                        top: '10%',
-                        left: '0%',
-                        right: '0%',
-                        bottom: '4%',
-                        containLabel: true
-                    },
-                    xAxis: [
-                        {
-                            type: 'category',
-                            data: ['Sat','Sun','Mon', 'Tue', 'Wed', 'Thu', 'Fri' ],
-                            axisTick: {
-                                alignWithLabel: true
-                            },
-                            axisLabel: {
-                                color: "rgba(255,255,255,.6)",
-                                fontSize: "12"
-                            },
-                            axisLine: {
-                                show: false
-                                // 如果想要设置单独的线条样式
-                                // lineStyle: {
-                                //     color: "rgba(255,255,255,.1)",
-                                //     width: 1,
-                                //     type: "solid"
-                                // }
-                            }
-                        }
-                    ],
-                    yAxis: [
-                        {
-                            type: 'value',
-                            axisLabel: {
-                                textStyle: {
-                                    color: "rgba(255,255,255,.6)",
-                                    fontSize: 12
-                                }
-                            },
-                            axisLine:{
-                                lineStyle:{
-                                    color: "rgba(255,255,255,.1)",
-                                }
-                            },
-                            splitLine: {
-                                lineStyle: {
-                                    color: "rgba(255,255,255,.1)"
-                                }
-                            }
-                        }
-                    ],
-                    series: [
-                        {
-                            name: '峰值带宽',
-                            type: 'bar',
-                            barWidth: '35%',
-                            data: this.$store.state.dc01_bgp_pd,
-                            itemStyle: {
-                                // 修改柱子圆角
-                                barBorderRadius: 5
-                            }
-                        }
-                    ]
-                });
+                this.myChart01 = echarts.init(this.$refs.leftBar)
+                this.myChart01.setOption(this.myChart01_option,true);
                 let myChart02 = echarts.init(this.$refs.leftLine)
                 myChart02.setOption({
                     color: ['red', 'yellow', 'green'],
@@ -226,9 +230,36 @@
                     method:'post',
                     data:Datebj,
                 });
-                console.log(ret);
+               let date_arr = [];
+               let bw_arr = [];
+                ret.forEach((item)=>{
+                   date_arr.push(item['day']);
+                   bw_arr.push(item['value']* 2)
+                   // bw_arr.push(item['value'])
+                });
+                this.myChart01_option.xAxis[0].data = date_arr;
+                this.myChart01_option.series[0].data = bw_arr;
+                // this.$store.commit('udXaxis',tmp_arr)
+                // console.log(ret);
             }
-        }
+        },
+        watch:{
+            myChart01_option :{
+                handler(newVal, oldVal) {
+                    if (this.myChart01) {
+                        if (newVal) {
+                            this.myChart01.setOption(newVal);
+                        } else {
+                            this.myChart01.setOption(oldVal);
+                        }
+                    } else {
+                        this.draw();
+                    }
+                },
+                deep:true
+            },
+        },
+
     }
 </script>
 
