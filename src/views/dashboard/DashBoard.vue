@@ -6,7 +6,7 @@
                 <h2>DC01-BGP-PD</h2>
                 <div style="color: white;text-align: center">
                     <el-date-picker
-                            v-model="bwDate"
+                            v-model="bwbgpDate"
                             type="daterange"
                             range-separator="至"
                             start-placeholder="开始日期"
@@ -16,13 +16,31 @@
                             value-format="yyyy-MM-dd"
                             :picker-options="pickerOptions">
                     </el-date-picker>
-                    <el-button size="mini" type="danger" :disabled="button" @click="getDate" style="margin-left: 3px">提交</el-button>
+                    <el-button size="mini" type="danger" :disabled="buttonbgp" @click="getbgpDate"
+                               style="margin-left: 3px">提交
+                    </el-button>
                 </div>
                 <div class="chart" ref="leftBar"></div>
                 <div class="panel-footer"></div>
             </div>
             <div class="panel line">
-                <h2>线形图-就业行情</h2>
+                <h2>DC01-CU-PD</h2>
+                <div style="color: white;text-align: center">
+                    <el-date-picker
+                            v-model="bwcuDate"
+                            type="daterange"
+                            range-separator="至"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期"
+                            size="mini"
+                            style="width:230px"
+                            value-format="yyyy-MM-dd"
+                            :picker-options="pickerOptions">
+                    </el-date-picker>
+                    <el-button size="mini" type="danger" :disabled="buttoncu" @click="getcuDate"
+                               style="margin-left: 3px">提交
+                    </el-button>
+                </div>
                 <div class="chart" ref="leftLine"></div>
                 <div class="panel-footer"></div>
             </div>
@@ -78,7 +96,7 @@
         var h = dt.getHours() + '';//获取时
         var m = dt.getMinutes() + '';//获取分
         var s = dt.getSeconds() + '';//获取秒
-        document.querySelector(".showTime").innerHTML = '当前时间：' + y + "年" + mt.padStart(2,'0') + "月" + day.padStart(2,'0') + "日" + "-" + h.padStart(2,'0') + ":" + m.padStart(2,'0') + ":" + s.padStart(2,'0');
+        document.querySelector(".showTime").innerHTML = '当前时间：' + y + "年" + mt.padStart(2, '0') + "月" + day.padStart(2, '0') + "日" + "-" + h.padStart(2, '0') + ":" + m.padStart(2, '0') + ":" + s.padStart(2, '0');
         t = setTimeout(time, 1000); //设定定时器，循环运行
     }
 
@@ -87,96 +105,175 @@
 
     export default {
         name: "DashBoard",
-        computed:{
-          button(){
-              if (!this.bwDate){
-                  return true
-              }else false
-          }
+        computed: {
+            buttonbgp() {
+                if (!this.bwbgpDate) {
+                    return true
+                } else false
+            },
+            buttoncu() {
+                if (!this.bwcuDate) {
+                    return true
+                } else false
+            }
         },
-        data(){
-          return {
-              bwDate:'',
-              pickerOptions:{
-                  disabledDate(time) {
-                      return time.getTime() > Date.now();
-                  }
-              },
-              myChart01_option:{
-                  color: ['#2f89cf'],
-                  tooltip: {
-                      trigger: 'axis',
-                      axisPointer: {            // 坐标轴指示器，坐标轴触发有效
-                          type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-                      }
-                  },
-                  grid: {
-                      top: '10%',
-                      left: '0%',
-                      right: '0%',
-                      bottom: '4%',
-                      containLabel: true
-                  },
-                  xAxis: [
-                      {
-                          type: 'category',
-                          data:[],
-                          // data: this.$store.state.bgp_pd_xAxis,
-                          axisTick: {
-                              alignWithLabel: true
-                          },
-                          axisLabel: {
-                              color: "rgba(255,255,255,.6)",
-                              fontSize: "12"
-                          },
-                          axisLine: {
-                              show: false
-                              // 如果想要设置单独的线条样式
-                              // lineStyle: {
-                              //     color: "rgba(255,255,255,.1)",
-                              //     width: 1,
-                              //     type: "solid"
-                              // }
-                          }
-                      }
-                  ],
-                  yAxis: [
-                      {
-                          type: 'value',
-                          axisLabel: {
-                              textStyle: {
-                                  color: "rgba(255,255,255,.6)",
-                                  fontSize: 12
-                              }
-                          },
-                          axisLine:{
-                              lineStyle:{
-                                  color: "rgba(255,255,255,.1)",
-                              }
-                          },
-                          splitLine: {
-                              lineStyle: {
-                                  color: "rgba(255,255,255,.1)"
-                              }
-                          }
-                      }
-                  ],
-                  series: [
-                      {
-                          name: '峰值带宽',
-                          type: 'bar',
-                          barWidth: '35%',
-                          // data: this.$store.state.dc01_bgp_pd,
-                          data:[],
-                          itemStyle: {
-                              // 修改柱子圆角
-                              barBorderRadius: 5
-                          }
-                      }
-                  ]
-              },
-              myChart01 : null
-          }
+        data() {
+            return {
+                bwbgpDate: '',
+                bwcuDate: '',
+                bwtelDate: '',
+                pickerOptions: {
+                    disabledDate(time) {
+                        return time.getTime() > Date.now();
+                    }
+                },
+                bgp_pd_option: {
+                    color: ['#2f89cf'],
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                        }
+                    },
+                    grid: {
+                        top: '10%',
+                        left: '0%',
+                        right: '0%',
+                        bottom: '4%',
+                        containLabel: true
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            data: [],
+                            // data: this.$store.state.bgp_pd_xAxis,
+                            axisTick: {
+                                alignWithLabel: true
+                            },
+                            axisLabel: {
+                                color: "rgba(255,255,255,.6)",
+                                fontSize: "12"
+                            },
+                            axisLine: {
+                                show: false
+                                // 如果想要设置单独的线条样式
+                                // lineStyle: {
+                                //     color: "rgba(255,255,255,.1)",
+                                //     width: 1,
+                                //     type: "solid"
+                                // }
+                            }
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value',
+                            axisLabel: {
+                                textStyle: {
+                                    color: "rgba(255,255,255,.6)",
+                                    fontSize: 12
+                                }
+                            },
+                            axisLine: {
+                                lineStyle: {
+                                    color: "rgba(255,255,255,.1)",
+                                }
+                            },
+                            splitLine: {
+                                lineStyle: {
+                                    color: "rgba(255,255,255,.1)"
+                                }
+                            }
+                        }
+                    ],
+                    series: [
+                        {
+                            name: '峰值带宽',
+                            type: 'bar',
+                            barWidth: '35%',
+                            // data: this.$store.state.dc01_bgp_pd,
+                            data: [],
+                            itemStyle: {
+                                // 修改柱子圆角
+                                barBorderRadius: 5
+                            }
+                        }
+                    ]
+                },
+                bgp_pd: null,
+                cu_pd_option: {
+                    color: ['#2f89cf'],
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                        }
+                    },
+                    grid: {
+                        top: '10%',
+                        left: '0%',
+                        right: '0%',
+                        bottom: '4%',
+                        containLabel: true
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            data: [],
+                            axisTick: {
+                                alignWithLabel: true
+                            },
+                            axisLabel: {
+                                color: "rgba(255,255,255,.6)",
+                                fontSize: "12"
+                            },
+                            axisLine: {
+                                show: false
+                                // 如果想要设置单独的线条样式
+                                // lineStyle: {
+                                //     color: "rgba(255,255,255,.1)",
+                                //     width: 1,
+                                //     type: "solid"
+                                // }
+                            }
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value',
+                            axisLabel: {
+                                textStyle: {
+                                    color: "rgba(255,255,255,.6)",
+                                    fontSize: 12
+                                }
+                            },
+                            axisLine: {
+                                lineStyle: {
+                                    color: "rgba(255,255,255,.1)",
+                                }
+                            },
+                            splitLine: {
+                                lineStyle: {
+                                    color: "rgba(255,255,255,.1)"
+                                }
+                            }
+                        }
+                    ],
+                    series: [
+                        {
+                            name: '峰值带宽',
+                            type: 'bar',
+                            barWidth: '35%',
+                            data: [],
+                            itemStyle: {
+                                // 修改柱子圆角
+                                barBorderRadius: 5
+                            }
+                        }
+                    ]
+                },
+                cu_pd: null,
+            }
         },
         mounted() {
             t = setTimeout(time, 1000);//開始运行
@@ -184,80 +281,90 @@
         },
         methods: {
             draw() {
-                this.myChart01 = echarts.init(this.$refs.leftBar)
-                this.myChart01.setOption(this.myChart01_option,true);
-                let myChart02 = echarts.init(this.$refs.leftLine)
-                myChart02.setOption({
-                    color: ['red', 'yellow', 'green'],
-                    tooltip: {
-                        show: true
-                    },
-                    legend: {
-                        data: ['衣服', '帽子'],
-                        top: 15
-                    },
-                    // X轴
-                    xAxis: {
-                        data: [
-                            '一月', '二月', '三月', '四月'
-                        ]
-                    },
-                    // Y轴
-                    yAxis: {},
-                    // 数据
-                    series: [
-                        {
-                            name: '衣服',
-                            type: 'line',
-                            data: [120, 100, 440, 500]
-                        },
-                        {
-                            name: '帽子',
-                            type: 'line',
-                            data: [200, 120, 240, 330]
-                        },
-                    ]
-                })
+                this.bgp_pd = echarts.init(this.$refs.leftBar)
+                this.bgp_pd.setOption(this.bgp_pd_option, true);
+                this.cu_pd = echarts.init(this.$refs.leftLine)
+                this.cu_pd.setOption(this.cu_pd_option, true)
 
             },
-            async getDate(){
+            async getbgpDate() {
                 let Datebj = {
-                    start:this.bwDate[0],
-                    stop:this.bwDate[1]
+                    start: this.bwbgpDate[0],
+                    stop: this.bwbgpDate[1],
+                    isp: 'bgp',
                 };
-               const {data:ret} = await getBW({
-                    url:'/bw/',
-                    method:'post',
-                    data:Datebj,
+                const {data: ret} = await getBW({
+                    url: '/bw/',
+                    method: 'post',
+                    data: Datebj,
                 });
-               let date_arr = [];
-               let bw_arr = [];
-                ret.forEach((item)=>{
-                   date_arr.push(item['day']);
-                   bw_arr.push(item['value']* 2)
-                   // bw_arr.push(item['value'])
+                let date_arr = [];
+                let bw_arr = [];
+                ret.forEach((item) => {
+                    date_arr.push(item['day']);
+                    bw_arr.push(item['value'] * 2)
+                    // bw_arr.push(item['value'])
                 });
-                this.myChart01_option.xAxis[0].data = date_arr;
-                this.myChart01_option.series[0].data = bw_arr;
+                this.bgp_pd_option.xAxis[0].data = date_arr;
+                this.bgp_pd_option.series[0].data = bw_arr;
+                // this.$store.commit('udXaxis',tmp_arr)
+                // console.log(ret);
+            },
+            async getcuDate() {
+                let Datebj = {
+                    start: this.bwcuDate[0],
+                    stop: this.bwcuDate[1],
+                    isp: 'cu',
+                };
+                const {data: ret} = await getBW({
+                    url: '/bw/',
+                    method: 'post',
+                    data: Datebj,
+                });
+                let date_arr = [];
+                let bw_arr = [];
+                ret.forEach((item) => {
+                    date_arr.push(item['day']);
+                    bw_arr.push(item['value'])
+                    // bw_arr.push(item['value'])
+                });
+                this.cu_pd_option.xAxis[0].data = date_arr;
+                this.cu_pd_option.series[0].data = bw_arr;
                 // this.$store.commit('udXaxis',tmp_arr)
                 // console.log(ret);
             }
+
         },
-        watch:{
-            myChart01_option :{
+        watch: {
+            bgp_pd_option: {
                 handler(newVal, oldVal) {
-                    if (this.myChart01) {
+                    if (this.bgp_pd) {
                         if (newVal) {
-                            this.myChart01.setOption(newVal);
+                            this.bgp_pd.setOption(newVal);
                         } else {
-                            this.myChart01.setOption(oldVal);
+                            this.bgp_pd.setOption(oldVal);
                         }
                     } else {
                         this.draw();
                     }
                 },
-                deep:true
+                deep: true
             },
+            cu_pd_option: {
+                handler(newVal, oldVal) {
+                    if (this.cu_pd) {
+                        if (newVal) {
+                            this.cu_pd.setOption(newVal);
+                        } else {
+                            this.cu_pd.setOption(oldVal);
+                        }
+                    } else {
+                        this.draw();
+                    }
+                },
+                deep: true
+            },
+
         },
 
     }
