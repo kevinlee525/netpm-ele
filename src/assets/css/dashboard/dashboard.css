@@ -195,7 +195,7 @@ li {
 }
 .right .panel .chart {
     height: 180px;
-    background-color: pink;
+    /*background-color: pink;*/
 }
 .center .no {
     background: rgba(101, 132, 226, 0.1);

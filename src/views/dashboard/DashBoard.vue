@@ -16,7 +16,7 @@
                             value-format="yyyy-MM-dd"
                             :picker-options="pickerOptions">
                     </el-date-picker>
-                    <el-button size="mini" type="danger" :disabled="buttonbgp" @click="getbgpDate"
+                    <el-button size="mini" type="danger" :disabled="buttonbgp" @click="getbgpData"
                                style="margin-left: 3px">提交
                     </el-button>
                 </div>
@@ -37,7 +37,7 @@
                             value-format="yyyy-MM-dd"
                             :picker-options="pickerOptions">
                     </el-date-picker>
-                    <el-button size="mini" type="danger" :disabled="buttoncu" @click="getcuDate"
+                    <el-button size="mini" type="danger" :disabled="buttoncu" @click="getcuData"
                                style="margin-left: 3px">提交
                     </el-button>
                 </div>
@@ -69,13 +69,29 @@
         </div>
         <div class="right">
             <div class="panel bar">
-                <h2>柱形图-就业行情</h2>
-                <div class="chart">图表</div>
+                <h2>DC01-TEL-PD</h2>
+                <div style="color: white;text-align: center">
+                    <el-date-picker
+                            v-model="bwtelDate"
+                            type="daterange"
+                            range-separator="至"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期"
+                            size="mini"
+                            style="width:230px"
+                            value-format="yyyy-MM-dd"
+                            :picker-options="pickerOptions">
+                    </el-date-picker>
+                    <el-button size="mini" type="danger" :disabled="buttontel" @click="gettelData"
+                               style="margin-left: 3px">提交
+                    </el-button>
+                </div>
+                <div class="chart" ref="rightBar"></div>
                 <div class="panel-footer"></div>
             </div>
             <div class="panel line">
-                <h2>柱形图-就业行情</h2>
-                <div class="chart">图表</div>
+                <h2>DC01-网络设备分布</h2>
+                <div class="chart" ref="rightPie"></div>
                 <div class="panel-footer"></div>
             </div>
 
@@ -113,6 +129,11 @@
             },
             buttoncu() {
                 if (!this.bwcuDate) {
+                    return true
+                } else false
+            },
+            buttontel() {
+                if (!this.bwtelDate) {
                     return true
                 } else false
             }
@@ -202,6 +223,78 @@
                 },
                 bgp_pd: null,
                 cu_pd_option: {
+                    color: ["#00f2f1", "#ed3f35"],
+                    tooltip: {
+                        // 通过坐标轴来触发
+                        trigger: "axis"
+                    },
+                    // legend: {
+                        // 距离容器10%
+                        // right: "10%",
+                        // 修饰图例文字的颜色
+                        // textStyle: {
+                        //     color: "#4c9bfd"
+                        // }
+                        // 如果series 里面设置了name，此时图例组件的data可以省略
+                        // data: ["邮件营销", "联盟广告"]
+                    // },
+                    grid: {
+                        top: "20%",
+                        left: "3%",
+                        right: "4%",
+                        bottom: "3%",
+                        show: true,
+                        borderColor: "#012f4a",
+                        containLabel: true
+                    },
+
+                    xAxis: {
+                        type: "category",
+                        boundaryGap: false,
+                        data: [],
+                        // 去除刻度
+                        axisTick: {
+                            show: false
+                        },
+                        // 修饰刻度标签的颜色
+                        axisLabel: {
+                            color: "rgba(255,255,255,.7)"
+                        },
+                        // 去除x坐标轴的颜色
+                        axisLine: {
+                            show: false
+                        }
+                    },
+                    yAxis: {
+                        type: "value",
+                        // 去除刻度
+                        axisTick: {
+                            show: false
+                        },
+                        // 修饰刻度标签的颜色
+                        axisLabel: {
+                            color: "rgba(255,255,255,.7)"
+                        },
+                        // 修改y轴分割线的颜色
+                        splitLine: {
+                            lineStyle: {
+                                color: "#012f4a"
+                            }
+                        }
+                    },
+                    series: [
+                        {
+                            name: "峰值带宽",
+                            type: "line",
+                            // stack: "总量",
+                            // 是否让线条圆滑显示
+                            smooth: true,
+                            data: []
+                        },
+                    ]
+                },
+                cu_pd: null,
+                tel_pd_option:{
                     color: ['#2f89cf'],
                     tooltip: {
                         trigger: 'axis',
@@ -264,6 +357,7 @@
                             name: '峰值带宽',
                             type: 'bar',
                             barWidth: '35%',
+                            // data: this.$store.state.dc01_bgp_pd,
                             data: [],
                             itemStyle: {
                                 // 修改柱子圆角
@@ -272,7 +366,7 @@
                         }
                     ]
                 },
-                cu_pd: null,
+                tel_pd :null,
             }
         },
         mounted() {
@@ -281,13 +375,14 @@
         },
         methods: {
             draw() {
-                this.bgp_pd = echarts.init(this.$refs.leftBar)
+                this.bgp_pd = echarts.init(this.$refs.leftBar);
                 this.bgp_pd.setOption(this.bgp_pd_option, true);
-                this.cu_pd = echarts.init(this.$refs.leftLine)
-                this.cu_pd.setOption(this.cu_pd_option, true)
-
+                this.cu_pd = echarts.init(this.$refs.leftLine);
+                this.cu_pd.setOption(this.cu_pd_option, true);
+                this.tel_pd = echarts.init(this.$refs.rightBar);
+                this.tel_pd.setOption(this.tel_pd_option);
             },
-            async getbgpDate() {
+            async getbgpData() {
                 let Datebj = {
                     start: this.bwbgpDate[0],
                     stop: this.bwbgpDate[1],
@@ -310,7 +405,7 @@
                 // this.$store.commit('udXaxis',tmp_arr)
                 // console.log(ret);
             },
-            async getcuDate() {
+            async getcuData() {
                 let Datebj = {
                     start: this.bwcuDate[0],
                     stop: this.bwcuDate[1],
@@ -328,10 +423,30 @@
                     bw_arr.push(item['value'])
                     // bw_arr.push(item['value'])
                 });
-                this.cu_pd_option.xAxis[0].data = date_arr;
+                this.cu_pd_option.xAxis.data = date_arr;
                 this.cu_pd_option.series[0].data = bw_arr;
                 // this.$store.commit('udXaxis',tmp_arr)
                 // console.log(ret);
+            },
+            async gettelData() {
+                let Datebj = {
+                    start: this.bwtelDate[0],
+                    stop: this.bwtelDate[1],
+                    isp: 'tel',
+                };
+                const {data: ret} = await getBW({
+                    url: '/bw/',
+                    method: 'post',
+                    data: Datebj,
+                });
+                let date_arr = [];
+                let bw_arr = [];
+                ret.forEach((item) => {
+                    date_arr.push(item['day']);
+                    bw_arr.push(item['value']*2)
+                });
+                this.tel_pd_option.xAxis[0].data = date_arr;
+                this.tel_pd_option.series[0].data = bw_arr;
             }
 
         },
@@ -364,7 +479,20 @@
                 },
                 deep: true
             },
-
+            tel_pd_option: {
+                handler(newVal, oldVal) {
+                    if (this.tel_pd) {
+                        if (newVal) {
+                            this.tel_pd.setOption(newVal);
+                        } else {
+                            this.tel_pd.setOption(oldVal);
+                        }
+                    } else {
+                        this.draw();
+                    }
+                },
+                deep: true
+            },
         },
 
     }
