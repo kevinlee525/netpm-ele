@@ -90,8 +90,24 @@
                 <div class="panel-footer"></div>
             </div>
             <div class="panel line">
-                <h2>DC01-网络设备分布</h2>
-                <div class="chart" ref="rightPie"></div>
+                <h2>DC01-BGP-EXIT</h2>
+                <div style="color: white;text-align: center">
+                    <el-date-picker
+                            v-model="bwbgpeDate"
+                            type="daterange"
+                            range-separator="至"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期"
+                            size="mini"
+                            style="width:230px"
+                            value-format="yyyy-MM-dd"
+                            :picker-options="pickerOptions">
+                    </el-date-picker>
+                    <el-button size="mini" type="danger" :disabled="buttonbgpe" @click="getbgpeData"
+                               style="margin-left: 3px">提交
+                    </el-button>
+                </div>
+                <div class="chart" ref="rightline"></div>
                 <div class="panel-footer"></div>
             </div>
 
@@ -136,13 +152,20 @@
                 if (!this.bwtelDate) {
                     return true
                 } else false
-            }
+            },
+            buttonbgpe() {
+                if (!this.bwbgpeDate) {
+                    return true
+                } else false
+            },
+
         },
         data() {
             return {
                 bwbgpDate: '',
                 bwcuDate: '',
                 bwtelDate: '',
+                bwbgpeDate:'',
                 pickerOptions: {
                     disabledDate(time) {
                         return time.getTime() > Date.now();
@@ -367,6 +390,68 @@
                     ]
                 },
                 tel_pd :null,
+                bgpe_option:{
+                    color: ["#00f2f1", "#ed3f35"],
+                    tooltip: {
+                        // 通过坐标轴来触发
+                        trigger: "axis"
+                    },
+                    grid: {
+                        top: "10%",
+                        left: "3%",
+                        right: "4%",
+                        bottom: "3%",
+                        show: true,
+                        borderColor: "#012f4a",
+                        containLabel: true
+                    },
+
+                    xAxis: {
+                        type: "category",
+                        boundaryGap: false,
+                        data: [],
+                        // 去除刻度
+                        axisTick: {
+                            show: false
+                        },
+                        // 修饰刻度标签的颜色
+                        axisLabel: {
+                            color: "rgba(255,255,255,.7)"
+                        },
+                        // 去除x坐标轴的颜色
+                        axisLine: {
+                            show: false
+                        }
+                    },
+                    yAxis: {
+                        type: "value",
+                        // 去除刻度
+                        axisTick: {
+                            show: false
+                        },
+                        // 修饰刻度标签的颜色
+                        axisLabel: {
+                            color: "rgba(255,255,255,.7)"
+                        },
+                        // 修改y轴分割线的颜色
+                        splitLine: {
+                            lineStyle: {
+                                color: "#012f4a"
+                            }
+                        }
+                    },
+                    series: [
+                        {
+                            name: "峰值带宽",
+                            type: "line",
+                            // stack: "总量",
+                            // 是否让线条圆滑显示
+                            smooth: true,
+                            data: []
+                        },
+                    ]
+                },
+                bgpe:null
             }
         },
         mounted() {
@@ -381,6 +466,8 @@
                 this.cu_pd.setOption(this.cu_pd_option, true);
                 this.tel_pd = echarts.init(this.$refs.rightBar);
                 this.tel_pd.setOption(this.tel_pd_option);
+                this.bgpe = echarts.init(this.$refs.rightline);
+                this.bgpe.setOption(this.bgpe_option);
             },
             async getbgpData() {
                 let Datebj = {
@@ -447,7 +534,27 @@
                 });
                 this.tel_pd_option.xAxis[0].data = date_arr;
                 this.tel_pd_option.series[0].data = bw_arr;
-            }
+            },
+            async getbgpeData() {
+                let Datebj = {
+                    start: this.bwbgpeDate[0],
+                    stop: this.bwbgpeDate[1],
+                    isp: 'bgp-e',
+                };
+                const {data: ret} = await getBW({
+                    url: '/bw/',
+                    method: 'post',
+                    data: Datebj,
+                });
+                let date_arr = [];
+                let bw_arr = [];
+                ret.forEach((item) => {
+                    date_arr.push(item['day']);
+                    bw_arr.push(item['value'])
+                });
+                this.bgpe_option.xAxis.data = date_arr;
+                this.bgpe_option.series[0].data = bw_arr;
+            },
 
         },
         watch: {
@@ -486,6 +593,20 @@
                             this.tel_pd.setOption(newVal);
                         } else {
                             this.tel_pd.setOption(oldVal);
+                        }
+                    } else {
+                        this.draw();
+                    }
+                },
+                deep: true
+            },
+            bgpe_option: {
+                handler(newVal, oldVal) {
+                    if (this.bgpe) {
+                        if (newVal) {
+                            this.bgpe.setOption(newVal);
+                        } else {
+                            this.bgpe.setOption(oldVal);
                         }
                     } else {
                         this.draw();
