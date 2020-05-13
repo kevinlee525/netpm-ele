@@ -9,6 +9,7 @@ const routes = [
   {
     path: '/',
     redirect:'/dashboard',
+    // redirect:'/netdevice',
   },
   {
     path:'/dashboard',

@@ -65,10 +65,7 @@
                 window.open('http://10.9.60.106:8000/')
             },
             See06(){
-                Message({
-                    message:'暂未上线!',
-                    type:'error'
-                })
+                window.open('http://10.9.60.115:5601/app/kibana')
             },
             See07(){
                 window.open('http://10.9.60.108/smokeping')
