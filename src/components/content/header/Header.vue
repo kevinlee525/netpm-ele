@@ -9,7 +9,8 @@
             active-text-color="#ffd04b"
             router>
         <el-menu-item>NetPM</el-menu-item>
-        <el-menu-item v-for="(item,index) in paths" :key="index" :index="item.name">
+        <el-menu-item v-for="(item,index) in paths" :key="index" :index="item.name"
+         :route="item.path">
             {{item.name}}
         </el-menu-item>
         <el-submenu index="">
@@ -34,7 +35,8 @@
                 currentPath:'home',
                 paths:[
                     {name:'dashboard',path:'/dashboard'},
-                    {name:'netdevice',path:'/netdevice'}
+                    {name:'netdevice',path:'/netdevice'},
+                    {name:'acl',path:'/acl'}
                 ]
             };
         },
@@ -47,6 +49,7 @@
         },
         methods: {
             handleSelect(key, keyPath) {
+                // this.$router.push('/' + keyPath)
                 // console.log(key, keyPath);
             },
             See01(){

@@ -3,16 +3,19 @@
     <Header/>
     <div class="body-show">
       <router-view></router-view>
+      <Footer></Footer>
     </div>
   </div>
 </template>
 
 <script>
 import Header from 'components/content/header/Header'
+import Footer from 'components/content/footer/Footer'
   export default {
      name:'App',
      components:{
-       Header
+       Header,
+       Footer
      }
   }
 </script>
