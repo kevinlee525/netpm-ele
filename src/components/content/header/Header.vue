@@ -7,13 +7,18 @@
             background-color="#323A40"
             text-color="#fff"
             active-text-color="#ffd04b"
-            router>
+            router
+            >
         <el-menu-item>NetPM</el-menu-item>
-        <el-menu-item v-for="(item,index) in paths" :key="index" :index="item.name"
-         :route="item.path">
-            {{item.name}}
-        </el-menu-item>
-        <el-submenu index="">
+        <el-menu-item index="/dashboard/">dashboard</el-menu-item>
+        <el-menu-item index="/netdevice/">netdevice</el-menu-item>
+        <el-submenu index="1">
+            <template slot="title">acl</template>
+            <el-menu-item index="/acl/test/" @click="test" >Test</el-menu-item>
+            <el-menu-item index="/acl/stage/" @click="stage">Stage</el-menu-item>
+            <el-menu-item index="/acl/pop/" @click="pop">Pop</el-menu-item>
+        </el-submenu>
+        <el-submenu index="2">
             <template slot="title">友情链接</template>
             <el-menu-item index="" @click="See01">流量气象图</el-menu-item>
             <el-menu-item index="" @click="See02">流量分析平台</el-menu-item>
@@ -32,18 +37,20 @@
         name: "Header",
         data() {
             return {
-                currentPath:'home',
+                currentPath:'/netdevice/',
                 paths:[
-                    {name:'dashboard',path:'/dashboard'},
-                    {name:'netdevice',path:'/netdevice'},
-                    {name:'acl',path:'/acl'}
+                    {name:'dashboard',path:'/dashboard/'},
+                    {name:'netdevice',path:'/netdevice/'},
+                    {name:'test',path:'/acl/test/'},
+                    {name:'stage',path:'/acl/stage/'},
+                    {name:'pop',path:'/acl/pop/'},
                 ]
             };
         },
         created(){
             this.paths.forEach((item)=>{
                 if (this.$route.path == item.path){
-                    this.currentPath = item.name
+                    this.currentPath = item.path
                 }
             })
         },
@@ -51,6 +58,15 @@
             handleSelect(key, keyPath) {
                 // this.$router.push('/' + keyPath)
                 // console.log(key, keyPath);
+            },
+            test(){
+                this.$router.push('/acl/test/')
+            },
+            stage(){
+                this.$router.push('/acl/stage/')
+            },
+            pop(){
+                this.$router.push('/acl/pop/')
             },
             See01(){
                 window.open('http://10.9.60.106/plugins/weathermap/weathermap-cacti-plugin.php')

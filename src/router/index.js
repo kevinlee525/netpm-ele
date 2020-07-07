@@ -1,27 +1,32 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+/*以下代码用于解决vue在控制台的 NavigationDuplicated 报错*/
+const originalPush = VueRouter.prototype.push;
+VueRouter.prototype.push = function push(location, onResolve, onReject) {
+  if (onResolve || onReject) return originalPush.call(this, location, onResolve, onReject)
+  return originalPush.call(this, location).catch(err => err)
+}
 
 import NetDevice from 'views/netdevice/NetDevice'
 import DashBoard from 'views/dashboard/DashBoard'
-import Acl from 'views/acl/Acl'
-import TestAcl from 'views/acl/childAcl/TestAcl'
-import PopAcl from 'views/acl/childAcl/PopAcl'
-import StageAcl from 'views/acl/childAcl/StageAcl'
+import TestAcl from 'views/acl/TestAcl'
+import PopAcl from 'views/acl/PopAcl'
+import StageAcl from 'views/acl/StageAcl'
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: '/',
     // redirect:'/dashboard',
-    redirect:'/acl',
+    redirect:'/netdevice/',
   },
   {
-    path:'/dashboard',
+    path:'/dashboard/',
     name:'dashboard',
     component:DashBoard
   },
   {
-    path: '/netdevice',
+    path: '/netdevice/',
     name: 'netdevice',
     component:NetDevice
     // route level code-splitting
@@ -30,23 +35,19 @@ const routes = [
     // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   },
   {
-    path:'/acl',
-    name:'acl',
-    component:Acl,
-    children:[
-      {
-        path:'test',
-        component:TestAcl
-      },
-      {
-        path:'stage',
-        component:StageAcl,
-      },
-      {
-        path:'pop',
-        component:PopAcl
-      }
-    ]
+    path:'/acl/test/',
+    name:'test',
+    component:TestAcl,
+  },
+  {
+    path:'/acl/stage/',
+    name:'stage',
+    component:StageAcl
+  },
+  {
+    path:'/acl/pop/',
+    name:'pop',
+    component:PopAcl
   }
 ];
 
