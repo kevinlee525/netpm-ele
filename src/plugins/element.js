@@ -12,6 +12,11 @@ import {
     Table,
     TableColumn,
     DatePicker,
+    Dialog,
+    Form,
+    FormItem,
+    Select,
+    Option,
     }
     from 'element-ui'
 Vue.use(Menu)
@@ -26,3 +31,8 @@ Vue.use(DropdownItem)
 Vue.use(Table)
 Vue.use(TableColumn)
 Vue.use(DatePicker)
+Vue.use(Dialog)
+Vue.use(Form)
+Vue.use(FormItem)
+Vue.use(Select)
+Vue.use(Option)

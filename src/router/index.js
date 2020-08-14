@@ -9,9 +9,7 @@ VueRouter.prototype.push = function push(location, onResolve, onReject) {
 
 import NetDevice from 'views/netdevice/NetDevice'
 import DashBoard from 'views/dashboard/DashBoard'
-import TestAcl from 'views/acl/TestAcl'
-import PopAcl from 'views/acl/PopAcl'
-import StageAcl from 'views/acl/StageAcl'
+import Acl from 'views/acl/Acl'
 Vue.use(VueRouter);
 
 const routes = [
@@ -35,20 +33,10 @@ const routes = [
     // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   },
   {
-    path:'/acl/test/',
-    name:'test',
-    component:TestAcl,
+    path:'/acl/',
+    name:'acl',
+    component:Acl,
   },
-  {
-    path:'/acl/stage/',
-    name:'stage',
-    component:StageAcl
-  },
-  {
-    path:'/acl/pop/',
-    name:'pop',
-    component:PopAcl
-  }
 ];
 
 const router = new VueRouter({

@@ -1,6 +1,10 @@
 <template>
     <el-card class="box-card" shadow="hover">
         <div slot="header" class="header">
+            <span class="title">
+            <el-button type="success" v-show="info">{{info}}
+            </el-button>
+            </span>
             <el-input style="width: 185px"
                       placeholder="请输入业务IP或管理IP"
                       v-model="ip"
@@ -29,12 +33,12 @@
             <el-table-column
                     prop="ipAddr"
                     label="ipAddr"
-                    >
+            >
             </el-table-column>
             <el-table-column
                     prop="macAddr"
                     label="macAddr"
-                    >
+            >
             </el-table-column>
             <el-table-column
                     prop="ifName"
@@ -49,22 +53,23 @@
     import {Message} from 'element-ui'
     import {getArp} from "network/netdevice/netdevice";
 
-    import {mapState,mapMutations} from 'vuex'
+    import {mapState, mapMutations} from 'vuex'
 
     export default {
         name: "NetDevice",
         data() {
             return {
                 ip: '',
+                info:''
             }
         },
-        computed:{
-          // tableData(){
-          //     return this.$store.state.tableData
-          // }
-          //   ...mapState({
-          //       tableData:state => state.tableData
-          //   })
+        computed: {
+            // tableData(){
+            //     return this.$store.state.tableData
+            // }
+            //   ...mapState({
+            //       tableData:state => state.tableData
+            //   })
             ...mapState(['tableData'])
         },
         methods: {
@@ -80,12 +85,13 @@
                         })
                     } else {
                         let switchInfo = res.pop();
-                        Message({
-                            message:switchInfo.hostname + ' ' + switchInfo.ip,
-                            type:'success'
-                        });
+                        this.info = switchInfo.hostname + ' ' + switchInfo.ip,
+                        // Message({
+                        //     message: switchInfo.hostname + ' ' + switchInfo.ip,
+                        //     type: 'success'
+                        // });
 
-                        this.$store.commit('udtableData',res)
+                        this.$store.commit('udtableData', res)
                     }
                 } catch (e) {
                     Message({
@@ -123,12 +129,13 @@
             rowClass() {
                 return 'text-align: center;'
             },
-            // clearData(){
-            //     this.$store.commit('udtableData',[])
-            // },
-            ...mapMutations({ //在方法里传递参数，会自动传递
-              clearData:'udtableData'
-            })
+            clearData(){
+                this.$store.commit('udtableData',[]);
+                this.info = ''
+            },
+            // ...mapMutations({ //在方法里传递参数，会自动传递
+                // clearData: 'udtableData'
+            // })
         }
     }
 </script>
@@ -145,5 +152,9 @@
     .header {
         margin: 0 auto;
         width: 400px;
+    }
+    .title {
+        position: absolute;
+        left: 55px;
     }
 </style>
