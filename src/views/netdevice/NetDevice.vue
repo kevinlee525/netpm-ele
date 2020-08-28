@@ -1,10 +1,6 @@
 <template>
     <el-card class="box-card" shadow="hover">
         <div slot="header" class="header">
-            <span class="title">
-            <el-button type="success" v-show="info">{{info}}
-            </el-button>
-            </span>
             <el-input style="width: 185px"
                       placeholder="请输入业务IP或管理IP"
                       v-model="ip"
@@ -60,7 +56,6 @@
         data() {
             return {
                 ip: '',
-                info:''
             }
         },
         computed: {
@@ -86,10 +81,10 @@
                     } else {
                         let switchInfo = res.pop();
                         this.info = switchInfo.hostname + ' ' + switchInfo.ip,
-                        // Message({
-                        //     message: switchInfo.hostname + ' ' + switchInfo.ip,
-                        //     type: 'success'
-                        // });
+                        Message({
+                            message: switchInfo.hostname + ' ' + switchInfo.ip,
+                            type: 'success'
+                        });
 
                         this.$store.commit('udtableData', res)
                     }
@@ -129,13 +124,12 @@
             rowClass() {
                 return 'text-align: center;'
             },
-            clearData(){
-                this.$store.commit('udtableData',[]);
-                this.info = ''
-            },
-            // ...mapMutations({ //在方法里传递参数，会自动传递
-                // clearData: 'udtableData'
-            // })
+            // clearData(){
+            //     this.$store.commit('udtableData',[]);
+            // },
+            ...mapMutations({ //在方法里传递参数，会自动传递
+                clearData: 'udtableData'
+            })
         }
     }
 </script>
@@ -152,9 +146,5 @@
     .header {
         margin: 0 auto;
         width: 400px;
-    }
-    .title {
-        position: absolute;
-        left: 55px;
     }
 </style>

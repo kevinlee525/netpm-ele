@@ -2,7 +2,7 @@
     <el-card class="box-card" shadow="hover">
         <div slot="header" class="header">
             <span class="title">
-            <el-button type="success" v-show="info">{{info}}
+            <el-button type="success" v-show="switchInfo.hostname">{{switchInfo.hostname}}
             </el-button>
             </span>
             <el-input style="width: 185px"
@@ -43,18 +43,50 @@
                         <el-input v-model="form.SrcIPv4" autocomplete="off" clearable></el-input>
                     </el-form-item>
                     <el-form-item label="SrcPort" :label-width="formLabelWidth">
-                        <el-input v-model="form.SrcPort" autocomplete="off" clearable></el-input>
+                        <el-input v-model="form.SrcPort" autocomplete="off" clearable :disabled="form.ProtocolType == 'ip'"></el-input>
                     </el-form-item>
                     <el-form-item label="DstIPv4" :label-width="formLabelWidth">
                         <el-input v-model="form.DstIPv4" autocomplete="off" clearable></el-input>
                     </el-form-item>
                     <el-form-item label="DstPort" :label-width="formLabelWidth">
-                        <el-input v-model="form.DstPort" autocomplete="off" clearable></el-input>
+                        <el-input v-model="form.DstPort" autocomplete="off" clearable :disabled="form.ProtocolType == 'ip'"></el-input>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="dialogFormVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="subbmit()">确 定</el-button>
+                    <el-button type="primary" @click="addacl()">确 定</el-button>
+                </div>
+            </el-dialog>
+            <el-dialog title="五元组信息" :visible.sync="aclFormVisible">
+                <el-form :model="form">
+                    <el-form-item label="GroupID" :label-width="formLabelWidth">
+                        <el-input  v-model="form.GroupID" autocomplete="off" disabled></el-input>
+                    </el-form-item>
+                    <el-form-item label="RuleID" :label-width="formLabelWidth">
+                        <el-input v-model="form.RuleID" autocomplete="off" disabled></el-input>
+                    </el-form-item>
+                    <el-form-item label="Action" :label-width="formLabelWidth">
+                        <el-input v-model="form.Action" autocomplete="off" disabled></el-input>
+                    </el-form-item>
+                    <el-form-item label="Protocol" :label-width="formLabelWidth">
+                        <el-input v-model="form.ProtocolType" autocomplete="off" disabled></el-input>
+                    </el-form-item>
+                    <el-form-item label="SrcIPv4" :label-width="formLabelWidth">
+                        <el-input v-model="form.SrcIPv4" autocomplete="off" disabled></el-input>
+                    </el-form-item>
+                    <el-form-item label="SrcPort" :label-width="formLabelWidth">
+                        <el-input v-model="form.SrcPort" autocomplete="off" disabled></el-input>
+                    </el-form-item>
+                    <el-form-item label="DstIPv4" :label-width="formLabelWidth">
+                        <el-input v-model="form.DstIPv4" autocomplete="off" disabled></el-input>
+                    </el-form-item>
+                    <el-form-item label="DstPort" :label-width="formLabelWidth">
+                        <el-input v-model="form.DstPort" autocomplete="off" disabled></el-input>
+                    </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="aclFormVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="delacl()">确 定</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -118,9 +150,8 @@
                     label="操作"
                     >
                 <template slot-scope="scope">
-                    <el-button
-                            @click.native.prevent="deleteRow(scope.$index, tableData)"
-                            type="text"
+                    <el-button  @click.native.prevent="deleteRow(scope.row)"
+                            type="warning"
                             size="small">
                         移除
                     </el-button>
@@ -133,17 +164,19 @@
 
 <script>
     import {getAcl} from "network/acl/acl";
-    import {isValidIP} from 'common/utils'
+    import {delAcl} from "network/acl/acl";
+    import {isValidIP} from 'common/utils';
     import {Message} from 'element-ui'
 
     export default {
-        name: "TestAcl",
+        name: "Acl",
         data() {
             return {
                 ip: '',
                 tableData: [],
-                info:'test',
+                switchInfo:{},
                 dialogFormVisible: false,
+                aclFormVisible: false,
                 form: {
                     GroupID: '',
                     RuleID: '',
@@ -159,12 +192,19 @@
         },
         methods: {
             clearData(){
-                this.tableData = []
+                this.tableData = [];
+                this.switchInfo = ''
             },
-            subbmit(){
+            addacl(){
               this.dialogFormVisible = false;
               let info = this.form;
-              console.log(info);
+              getAcl({
+                  url:'/acladd/',
+                  method:'post',
+                  data:info
+              }).then(res =>{
+                  console.log(res);
+              })
             },
             async getacl() {
                 try {
@@ -183,6 +223,7 @@
                         })
                     }
                     else {
+                        this.switchInfo = ret.pop();
                         this.tableData = ret
                     }
                 } catch (e) {
@@ -208,8 +249,28 @@
                     })
                 }
             },
-            deleteRow(index, rows) {
-                rows.splice(index, 1);
+            deleteRow(row) {
+                this.aclFormVisible = true;
+                this.form = row
+            },
+            delacl(){
+                this.aclFormVisible = false;
+                let delaclinfo = {
+                    GroupID:this.form.GroupID,
+                    RuleID:this.form.RuleID,
+                    mgtIP:this.switchInfo.mgtIP
+                };
+                delAcl({
+                    url:'/acldel/',
+                    method:'post',
+                    data:delaclinfo
+                }).then(res => {
+                    // console.log(res.data);
+                    if(res.data.code == '1000'){
+                        this.getacl()
+                    }
+                })
+
             }
         }
     }
