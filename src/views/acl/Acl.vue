@@ -195,16 +195,21 @@
                 this.tableData = [];
                 this.switchInfo = ''
             },
-            addacl(){
+            async addacl(){
               this.dialogFormVisible = false;
               let info = this.form;
-              getAcl({
+              const {data:ret} = await getAcl({
                   url:'/acladd/',
                   method:'post',
                   data:info
-              }).then(res =>{
-                  console.log(res);
-              })
+              });
+                if (ret.code == 1000){
+                  Message({
+                      message:'添加完毕!',
+                      type:'success'
+                  });
+                  this.getacl()
+              }
             },
             async getacl() {
                 try {
@@ -270,7 +275,6 @@
                             message:'删除成功!',
                             type:'success'
                         });
-                        // console.log(this.ip)
                         this.getacl()
                     }
                 })

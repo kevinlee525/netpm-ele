@@ -16,7 +16,7 @@ const routes = [
   {
     path: '/',
     // redirect:'/dashboard',
-    redirect:'/netdevice/',
+    redirect:'/arp/',
   },
   {
     path:'/dashboard/',
