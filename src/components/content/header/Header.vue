@@ -11,7 +11,7 @@
             >
         <el-menu-item>NetPM</el-menu-item>
         <el-menu-item index="/dashboard/">dashboard</el-menu-item>
-        <el-menu-item index="/netdevice/">netdevice</el-menu-item>
+        <el-menu-item index="/arp/">arp</el-menu-item>
         <el-menu-item index="/acl/">acl</el-menu-item>
         <el-submenu index="1">
             <template slot="title">友情链接</template>
@@ -32,10 +32,10 @@
         name: "Header",
         data() {
             return {
-                currentPath:'/netdevice/',
+                currentPath:'/arp/',
                 paths:[
                     {name:'dashboard',path:'/dashboard/'},
-                    {name:'netdevice',path:'/netdevice/'},
+                    {name:'arp',path:'/arp/'},
                     {name:'acl',path:'/acl/'},
                 ]
             };

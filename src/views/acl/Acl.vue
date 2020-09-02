@@ -40,13 +40,13 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="SrcIPv4" :label-width="formLabelWidth">
-                        <el-input v-model="form.SrcIPv4" autocomplete="off" clearable></el-input>
+                        <el-input v-model="form.SrcIPv4" autocomplete="off" clearable placeholder="ip/mask"></el-input>
                     </el-form-item>
                     <el-form-item label="SrcPort" :label-width="formLabelWidth">
                         <el-input v-model="form.SrcPort" autocomplete="off" clearable :disabled="form.ProtocolType == 'ip'"></el-input>
                     </el-form-item>
                     <el-form-item label="DstIPv4" :label-width="formLabelWidth">
-                        <el-input v-model="form.DstIPv4" autocomplete="off" clearable></el-input>
+                        <el-input v-model="form.DstIPv4" autocomplete="off" clearable placeholder="ip/mask"></el-input>
                     </el-form-item>
                     <el-form-item label="DstPort" :label-width="formLabelWidth">
                         <el-input v-model="form.DstPort" autocomplete="off" clearable :disabled="form.ProtocolType == 'ip'"></el-input>
@@ -265,8 +265,12 @@
                     method:'post',
                     data:delaclinfo
                 }).then(res => {
-                    // console.log(res.data);
                     if(res.data.code == '1000'){
+                        Message({
+                            message:'删除成功!',
+                            type:'success'
+                        });
+                        // console.log(this.ip)
                         this.getacl()
                     }
                 })

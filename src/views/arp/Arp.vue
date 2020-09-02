@@ -47,12 +47,12 @@
 <script>
     import {isValidIP} from 'common/utils'
     import {Message} from 'element-ui'
-    import {getArp} from "network/netdevice/netdevice";
+    import {getArp} from "network/arp/arp";
 
     import {mapState, mapMutations} from 'vuex'
 
     export default {
-        name: "NetDevice",
+        name: "Arp",
         data() {
             return {
                 ip: '',

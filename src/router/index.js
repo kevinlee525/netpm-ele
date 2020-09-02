@@ -7,7 +7,7 @@ VueRouter.prototype.push = function push(location, onResolve, onReject) {
   return originalPush.call(this, location).catch(err => err)
 }
 
-import NetDevice from 'views/netdevice/NetDevice'
+import Arp from 'views/arp/Arp'
 import DashBoard from 'views/dashboard/DashBoard'
 import Acl from 'views/acl/Acl'
 Vue.use(VueRouter);
@@ -24,9 +24,9 @@ const routes = [
     component:DashBoard
   },
   {
-    path: '/netdevice/',
-    name: 'netdevice',
-    component:NetDevice
+    path: '/arp/',
+    name: 'arp',
+    component:Arp
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
