@@ -6,3 +6,6 @@ export function getAcl(config) {
 export function delAcl(config) {
     return request02(config)
 }
+export function addAcl(config) {
+    return request02(config)
+}

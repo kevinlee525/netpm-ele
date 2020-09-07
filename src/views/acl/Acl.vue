@@ -14,7 +14,7 @@
             </el-input>
             <el-button type="primary" @click="getacl">提交</el-button>
             <span class="add">
-                <el-button type="warning"  icon="el-icon-edit" @click="dialogFormVisible = true">
+                <el-button type="warning" :disabled="isDisabledFn" icon="el-icon-edit" @click="dialogFormVisible = true">
                         添加
                 </el-button>
             </span>
@@ -29,21 +29,19 @@
                     <el-form-item label="Action" :label-width="formLabelWidth">
                         <el-select v-model="form.Action" placeholder="请选择动作" style="width: 560px">
                             <el-option label="permit" value="permit"></el-option>
-                            <el-option label="deny" value="deny"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="Protocol" :label-width="formLabelWidth">
                         <el-select v-model="form.ProtocolType" placeholder="请选择协议" style="width:560px">
                             <el-option label="ip" value="ip"></el-option>
                             <el-option label="tcp" value="tcp"></el-option>
-                            <el-option label="udp" value="udp"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="SrcIPv4" :label-width="formLabelWidth">
                         <el-input v-model="form.SrcIPv4" autocomplete="off" clearable placeholder="ip/mask"></el-input>
                     </el-form-item>
                     <el-form-item label="SrcPort" :label-width="formLabelWidth">
-                        <el-input v-model="form.SrcPort" autocomplete="off" clearable :disabled="form.ProtocolType == 'ip'"></el-input>
+                        <el-input v-model="form.SrcPort" placeholder= 'any' autocomplete="off" clearable :disabled="form.ProtocolType == 'ip'"></el-input>
                     </el-form-item>
                     <el-form-item label="DstIPv4" :label-width="formLabelWidth">
                         <el-input v-model="form.DstIPv4" autocomplete="off" clearable placeholder="ip/mask"></el-input>
@@ -165,6 +163,7 @@
 <script>
     import {getAcl} from "network/acl/acl";
     import {delAcl} from "network/acl/acl";
+    import {addAcl} from "network/acl/acl";
     import {isValidIP} from 'common/utils';
     import {Message} from 'element-ui'
 
@@ -190,6 +189,14 @@
                 formLabelWidth: '70px',
             }
         },
+        computed:{
+          isDisabledFn(){
+              if (this.tableData.length == 0){
+                  return true
+              }
+              return false
+          }
+        },
         methods: {
             clearData(){
                 this.tableData = [];
@@ -198,7 +205,7 @@
             async addacl(){
               this.dialogFormVisible = false;
               let info = this.form;
-              const {data:ret} = await getAcl({
+              const {data:ret} = await addAcl({
                   url:'/acladd/',
                   method:'post',
                   data:info
@@ -210,6 +217,18 @@
                   });
                   this.getacl()
               }
+                else if (ret.code == 1200){
+                    Message({
+                        message:'Sth. Wrong!',
+                        type:'warning'
+                    })
+                }
+                else if (ret.code == 1300){
+                    Message({
+                        message:'No authorized!',
+                        type:'warning'
+                    })
+                }
             },
             async getacl() {
                 try {
