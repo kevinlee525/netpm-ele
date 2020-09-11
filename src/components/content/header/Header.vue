@@ -10,7 +10,7 @@
             router
             >
         <el-menu-item>NetPM</el-menu-item>
-        <el-menu-item index="/dashboard/">dashboard</el-menu-item>
+<!--        <el-menu-item index="/dashboard/">dashboard</el-menu-item>-->
         <el-menu-item index="/arp/">arp</el-menu-item>
         <el-menu-item index="/acl/">acl</el-menu-item>
         <el-submenu index="1">

@@ -33,3 +33,9 @@ export function formatDate(date, fmt) {
 function padLeftZero(str) {
     return ('00' + str).substr(str.length)
 }
+export function getCookie() {
+    let  reg = /csrftoken=([\w]{60,})[;]?/g;
+    let  cookie = document.cookie;
+    return cookie ? reg.exec(cookie)[1] : null
+}
+

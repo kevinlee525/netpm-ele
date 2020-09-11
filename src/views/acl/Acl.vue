@@ -165,6 +165,7 @@
     import {delAcl} from "network/acl/acl";
     import {addAcl} from "network/acl/acl";
     import {isValidIP} from 'common/utils';
+    import {getCookie} from 'common/utils';
     import {Message} from 'element-ui'
 
     export default {
@@ -208,7 +209,8 @@
               const {data:ret} = await addAcl({
                   url:'/acladd/',
                   method:'post',
-                  data:info
+                  data:info,
+                  headers:{'X-CSRFToken': getCookie()},
               });
                 if (ret.code == 1000){
                   Message({
@@ -239,6 +241,7 @@
                         url: '/acl/',
                         method: 'post',
                         data: post_data,
+                        headers:{'X-CSRFToken': getCookie()},
                     });
                     if (typeof (ret.msg) == 'string'){
                         Message({
@@ -269,7 +272,7 @@
                 if (!isValidIP(this.ip)) {
                     Message({
                         message: 'Invalid IP!',
-                        type: 'warning'
+                        type: 'warning',
                     })
                 }
             },
@@ -287,7 +290,8 @@
                 delAcl({
                     url:'/acldel/',
                     method:'post',
-                    data:delaclinfo
+                    data:delaclinfo,
+                    headers:{'X-CSRFToken': getCookie()},
                 }).then(res => {
                     if(res.data.code == '1000'){
                         Message({
@@ -295,6 +299,11 @@
                             type:'success'
                         });
                         this.getacl()
+                    }else if (res.data.code == '1300'){
+                        Message({
+                            message:'No Authorized!',
+                            type:'warning'
+                        })
                     }
                 })
 
