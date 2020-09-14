@@ -34,8 +34,11 @@ function padLeftZero(str) {
     return ('00' + str).substr(str.length)
 }
 export function getCookie() {
-    let  reg = /csrftoken=([\w]{60,})[;]?/g;
-    let  cookie = document.cookie;
-    return cookie ? reg.exec(cookie)[1] : null
+    let  reg = /csrftoken=([\w]{60,})[;]?/; //不要加g 参数
+    let  cookies = document.cookie;
+    if(Boolean(cookies) && reg.test(cookies)){
+        return reg.exec(cookies)[1]
+    }
+    else {return null}
 }
 
