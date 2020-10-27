@@ -10,6 +10,7 @@ VueRouter.prototype.push = function push(location, onResolve, onReject) {
 import Arp from 'views/arp/Arp'
 import DashBoard from 'views/dashboard/DashBoard'
 import Acl from 'views/acl/Acl'
+import NetDevice from 'views/netdevice/NetDevice'
 Vue.use(VueRouter);
 
 const routes = [
@@ -37,6 +38,12 @@ const routes = [
     name:'acl',
     component:Acl,
   },
+  {
+    path:'/netdevice/',
+    name:'netdevice',
+    component:NetDevice,
+  },
+
 ];
 
 const router = new VueRouter({
