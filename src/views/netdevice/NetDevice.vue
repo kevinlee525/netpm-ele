@@ -1,5 +1,29 @@
 <template>
   <el-card class="box-card" shadow="hover">
+    <div slot="header" class="clearfix">
+      <el-input
+        style="width: 185px"
+        placeholder="请输入管理IP"
+        v-model="mgt_ip"
+        clearable
+      >
+      </el-input>
+      <el-input
+        style="width: 185px"
+        placeholder="主机名"
+        v-model="hostname"
+        clearable
+      >
+      </el-input>
+      <el-input
+        style="width: 185px"
+        placeholder="业务网段"
+        v-model="pd_net"
+        clearable
+      >
+      </el-input>
+      <el-button type="primary" @click="search()">搜索</el-button>
+    </div>
     <el-table
       :data="tableData"
       height="500"
@@ -23,8 +47,16 @@
         </template>
       </el-table-column>
     </el-table>
-    <div class=pagination>
-      <el-pagination background layout="prev, pager, next" :total="100">
+    <div class="pagination">
+      <el-pagination
+        background
+        layout="sizes,prev, pager, next,total"
+        :total="total"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :page-size="10"
+        :page-sizes="[5, 10, 20, 50]"
+      >
       </el-pagination>
     </div>
   </el-card>
@@ -36,22 +68,41 @@ export default {
   data() {
     return {
       tableData: [],
+      total: null,
+      size: null,
+      mgt_ip: null,
+      hostname: null,
+      pd_net:null,
     };
   },
   created() {
     this.getinfo();
   },
   methods: {
+    async handleSizeChange(val) {
+      this.size = val;
+      const { data: res } = await getNetdevice({
+        url: "/asset/v1/netdevice/" + `?size=${val}`,
+      });
+      this.tableData = res.results;
+    },
+    handleCurrentChange(val) {
+      getNetdevice({
+        url: "/asset/v1/netdevice/" + `?page=${val}` + "&size=" + this.size,
+      }).then((res) => {
+        this.tableData = res.data.results;
+      });
+    },
     getinfo() {
       getNetdevice({
         url: "/asset/v1/netdevice/",
       }).then((res) => {
         this.tableData = res.data.results;
-        //  console.log(res.data.results)
+        this.total = res.data.count;
       });
     },
-    conn(row){
-        console.log(row)
+    conn(row) {
+      console.log(row);
     },
     // 表头样式设置
     headClass() {
@@ -60,6 +111,9 @@ export default {
     // 表格样式设置
     rowClass() {
       return "text-align: center;";
+    },
+    search() {
+      console.log(11111);
     },
   },
 };
@@ -73,8 +127,14 @@ export default {
   height: 650px;
 }
 .pagination {
-    position: absolute;
-    bottom: 50px;
-    right: 15px;
+  position: absolute;
+  bottom: 10px;
+  right: 15px;
+}
+.header {
+  text-align: center;
+}
+.el-input {
+  margin-right: 25px;
 }
 </style>
