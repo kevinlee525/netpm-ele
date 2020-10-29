@@ -3,16 +3,18 @@
     <div slot="header" class="clearfix">
       <el-input
         style="width: 185px"
-        placeholder="请输入管理IP"
-        v-model="mgt_ip"
+        placeholder="主机名"
+        v-model="hostname"
         clearable
+        @clear="getinfo()"
       >
       </el-input>
       <el-input
         style="width: 185px"
-        placeholder="主机名"
-        v-model="hostname"
+        placeholder="管理IP"
+        v-model="mgt_ip"
         clearable
+        @clear="getinfo()"
       >
       </el-input>
       <el-input
@@ -20,6 +22,7 @@
         placeholder="业务网段"
         v-model="pd_net"
         clearable
+        @clear="getinfo()"
       >
       </el-input>
       <el-button type="primary" @click="search()">搜索</el-button>
@@ -63,6 +66,7 @@
 </template>
 <script>
 import { getNetdevice } from "network/netdevice/netdevice";
+import { Message } from "element-ui";
 export default {
   name: "netdevice",
   data() {
@@ -72,7 +76,7 @@ export default {
       size: null,
       mgt_ip: null,
       hostname: null,
-      pd_net:null,
+      pd_net: null,
     };
   },
   created() {
@@ -112,8 +116,52 @@ export default {
     rowClass() {
       return "text-align: center;";
     },
-    search() {
-      console.log(11111);
+    async search() {
+      const keyword01 = this.mgt_ip;
+      const keyword02 = this.hostname;
+      const keyword03 = this.pd_net;
+      if (keyword01) {
+        const { data: res } = await getNetdevice({
+          url: "/asset/v1/netdevice/" + `?search=${keyword01}`,
+        });
+        if (res.count == 0) {
+          Message({
+            message: "暂无结果，请确认搜索条件!",
+            type: "warning",
+          });
+          this.tableData = [];
+        } else {
+          this.tableData = res.results;
+        }
+      }
+      if (keyword02) {
+        const { data: res } = await getNetdevice({
+          url: "/asset/v1/netdevice/" + `?search=${keyword02}`,
+        });
+        if (res.count == 0) {
+          Message({
+            message: "暂无结果，请确认搜索条件!",
+            type: "warning",
+          });
+          this.tableData = [];
+        } else {
+          this.tableData = res.results;
+        }
+      }
+      if (keyword03) {
+        const { data: res } = await getNetdevice({
+          url: "/asset/v1/netdevice/" + `?search=${keyword03}`,
+        });
+        if (res.count == 0) {
+          Message({
+            message: "暂无结果，请确认搜索条件!",
+            type: "warning",
+          });
+          this.tableData = [];
+        } else {
+          this.tableData = res.results;
+        }
+      }
     },
   },
 };
