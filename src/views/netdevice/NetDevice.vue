@@ -29,6 +29,10 @@
     </div>
     <el-table
       :data="tableData"
+      v-loading="loading"
+      element-loading-text="拼命加载中"
+      element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(0, 0, 0, 0.8)"
       height="500"
       border
       :cell-style="rowClass"
@@ -77,6 +81,7 @@ export default {
       mgt_ip: null,
       hostname: null,
       pd_net: null,
+      loading: true,
     };
   },
   created() {
@@ -103,6 +108,10 @@ export default {
       }).then((res) => {
         this.tableData = res.data.results;
         this.total = res.data.count;
+        // setTimeout(()=>{
+        // this.loading = false
+        // },1500)
+        this.loading = false;
       });
     },
     conn(row) {
@@ -120,6 +129,7 @@ export default {
       const keyword01 = this.mgt_ip;
       const keyword02 = this.hostname;
       const keyword03 = this.pd_net;
+      this.loading = true;
       if (keyword01) {
         const { data: res } = await getNetdevice({
           url: "/asset/v1/netdevice/" + `?search=${keyword01}`,
@@ -130,8 +140,10 @@ export default {
             type: "warning",
           });
           this.tableData = [];
+          this.loading = false;
         } else {
           this.tableData = res.results;
+          this.loading = false;
         }
       }
       if (keyword02) {
@@ -144,8 +156,10 @@ export default {
             type: "warning",
           });
           this.tableData = [];
+          this.loading = false;
         } else {
           this.tableData = res.results;
+          this.loading = false;
         }
       }
       if (keyword03) {
@@ -158,8 +172,10 @@ export default {
             type: "warning",
           });
           this.tableData = [];
+          this.loading = false;
         } else {
           this.tableData = res.results;
+          this.loading = false;
         }
       }
     },

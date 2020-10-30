@@ -18,6 +18,7 @@ import {
     Select,
     Option,
     Pagination,
+    Loading,
     }
     from 'element-ui'
 Vue.use(Menu)
@@ -38,3 +39,4 @@ Vue.use(FormItem)
 Vue.use(Select)
 Vue.use(Option)
 Vue.use(Pagination)
+Vue.use(Loading)
