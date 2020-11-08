@@ -121,7 +121,7 @@
             >提交
           </el-button>
         </div>
-        <div class="chart" ref="rightline"></div>
+        <div class="chart" ref="rightLine"></div>
         <div class="panel-footer"></div>
       </div>
     </div>
@@ -529,6 +529,13 @@ export default {
       // console.log(ret);
     },
     async getcuData() {
+      const loading = this.$loading({
+        lock: true,
+        text: "拼命加载中,请稍后...",
+        spinner: "el-icon-loading",
+        background: "rgba(0, 0, 0, 0.4)",
+        target: this.$refs.leftLine,
+      });
       let Datebj = {
         start: this.bwcuDate[0],
         stop: this.bwcuDate[1],
@@ -549,9 +556,19 @@ export default {
       this.cu_pd_option.xAxis.data = date_arr;
       this.cu_pd_option.series[0].data = bw_arr;
       // this.$store.commit('udXaxis',tmp_arr)
-      // console.log(ret);
+      if(bw_arr.length > 0){
+        loading.close()
+      }
     },
     async gettelData() {
+      const loading = this.$loading({
+        lock: true,
+        text: "拼命加载中,请稍后...",
+        spinner: "el-icon-loading",
+        background: "rgba(0, 0, 0, 0.4)",
+        target: this.$refs.rightBar,
+      });
+
       let Datebj = {
         start: this.bwtelDate[0],
         stop: this.bwtelDate[1],
@@ -570,8 +587,18 @@ export default {
       });
       this.tel_pd_option.xAxis[0].data = date_arr;
       this.tel_pd_option.series[0].data = bw_arr;
+      if(bw_arr.length > 0 ){
+        loading.close()
+      }
     },
     async getbgpeData() {
+      const loading = this.$loading({
+        lock: true,
+        text: "拼命加载中,请稍后...",
+        spinner: "el-icon-loading",
+        background: "rgba(0, 0, 0, 0.4)",
+        target: this.$refs.rightLine,
+      });
       let Datebj = {
         start: this.bwbgpeDate[0],
         stop: this.bwbgpeDate[1],
@@ -590,6 +617,9 @@ export default {
       });
       this.bgpe_option.xAxis.data = date_arr;
       this.bgpe_option.series[0].data = bw_arr;
+      if(bw_arr.length > 0){
+        loading.close()
+      }
     },
     bgpclear() {
       if (!this.bwbgpDate) {
