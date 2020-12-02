@@ -492,8 +492,8 @@ export default {
       this.cu_pd.setOption(this.cu_pd_option, true);
       this.tel_pd = echarts.init(this.$refs.rightBar);
       this.tel_pd.setOption(this.tel_pd_option);
-      this.bgpe = echarts.init(this.$refs.rightline);
-      this.bgpe.setOption(this.bgpe_option);
+      this.bgpe = echarts.init(this.$refs.rightLine);
+      // this.bgpe.setOption(this.bgpe_option);
     },
     async getbgpData() {
       const loading = this.$loading({
