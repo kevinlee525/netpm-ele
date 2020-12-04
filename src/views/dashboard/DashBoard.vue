@@ -583,7 +583,7 @@ export default {
       let bw_arr = [];
       ret.forEach((item) => {
         date_arr.push(item["day"]);
-        bw_arr.push(item["value"] * 2);
+        bw_arr.push(item["value"]);
       });
       this.tel_pd_option.xAxis[0].data = date_arr;
       this.tel_pd_option.series[0].data = bw_arr;

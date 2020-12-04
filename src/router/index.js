@@ -40,8 +40,9 @@ const routes = [
   },
   {
     path:'/netdevice/',
-    name:'netdevice',
-    component:NetDevice,
+    redirect:'/dashboard/',
+    // name:'netdevice',
+    // component:NetDevice,
   },
 
 ];
