@@ -11,6 +11,7 @@ import Arp from 'views/arp/Arp'
 import DashBoard from 'views/dashboard/DashBoard'
 import Acl from 'views/acl/Acl'
 import NetDevice from 'views/netdevice/NetDevice'
+import Power from 'views/power/Power'
 Vue.use(VueRouter);
 
 const routes = [
@@ -40,9 +41,14 @@ const routes = [
   },
   {
     path:'/netdevice/',
-    redirect:'/dashboard/',
-    // name:'netdevice',
-    // component:NetDevice,
+    // redirect:'/dashboard/',
+    name:'netdevice',
+    component:NetDevice,
+  },
+  {
+    path:'/power/',
+    name:'power',
+    component:Power,
   },
 
 ];
