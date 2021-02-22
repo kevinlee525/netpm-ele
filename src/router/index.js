@@ -49,6 +49,17 @@ const routes = [
     path:'/power/',
     name:'power',
     component:Power,
+    // beforeEnter:(to,from,next) => {
+      // if (document.cookie.match('ldap')){
+        // next()
+      // }
+      // else{
+        // window.open('https://sso.yunshanmeicai.com/index.php/user/login',"_self")
+      // }
+      // console.log(to)
+      // console.log(from)
+      // next('https://sso.yunshanmeicai.com/index.php/user/login')
+    // }
   },
 
 ];
