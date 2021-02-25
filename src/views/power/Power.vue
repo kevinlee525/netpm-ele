@@ -7,6 +7,7 @@
           placeholder="请输入机柜号 eg A01"
           v-model="rack"
           clearable
+          @clear=clearData
         >
         </el-input>
         <el-button type="primary" @click="getpower">提交</el-button>
@@ -17,6 +18,7 @@
 </template>
 
 <script>
+import {Message} from  'element-ui';
 import echarts from "plugins/echarts";
 import { getPower } from 'network/power/power'
 export default {
@@ -103,7 +105,12 @@ export default {
   mounted() {
     // this.draw();
   },
+  
   methods: {
+    clearData(){
+      this.$router.go(0)
+      // this.$forceUpdate()
+    },
     draw() {
       this.power = echarts.init(this.$refs.power);
       this.power.setOption(this.power_option, true);
@@ -117,6 +124,13 @@ export default {
         method: "post",
         data: post_data,
       })
+      if(ret.code === 1111 ) {
+        Message({
+          message: ret.msg,
+          type: "warning"
+        })
+      }
+      else {
       this.power_option.series[0].name = this.rack + '电量峰值'
       // this.power_option.xAxis.data = Object.keys(ret[this.rack])
       this.power_option.xAxis.data = []
@@ -127,6 +141,7 @@ export default {
         this.power_option.xAxis.data.push(`${key}`)
       }
       this.draw()
+      }
     },
   },
 };
