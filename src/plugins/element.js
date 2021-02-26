@@ -19,6 +19,7 @@ import {
     Option,
     Pagination,
     Loading,
+    Upload,
     }
     from 'element-ui'
 Vue.use(Menu)
@@ -40,3 +41,4 @@ Vue.use(Select)
 Vue.use(Option)
 Vue.use(Pagination)
 Vue.use(Loading)
+Vue.use(Upload)

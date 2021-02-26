@@ -7,10 +7,14 @@
           placeholder="请输入机柜号 eg A01"
           v-model="rack"
           clearable
-          @clear=clearData
+          @clear="clearData"
         >
         </el-input>
         <el-button type="primary" @click="getpower">提交</el-button>
+        <el-upload class="upload" :action="url" :limit="1"
+        name="power.xlsx">
+          <el-button size="big" type="warning">点击上传</el-button>
+        </el-upload>
       </div>
     </div>
     <div class="power" ref="power"></div>
@@ -18,13 +22,14 @@
 </template>
 
 <script>
-import {Message} from  'element-ui';
+import { Message } from "element-ui";
 import echarts from "plugins/echarts";
-import { getPower } from 'network/power/power'
+import { getPower } from "network/power/power";
 export default {
   name: "power",
   data() {
     return {
+      url: "http://127.0.0.1:8000/be/upload/",
       rack: "",
       power_option: {
         color: ["#00f2f1", "#ed3f35"],
@@ -90,7 +95,7 @@ export default {
         },
         series: [
           {
-            name: '',
+            name: "",
             type: "line",
             // stack: "总量",
             // 是否让线条圆滑显示
@@ -105,10 +110,10 @@ export default {
   mounted() {
     // this.draw();
   },
-  
+
   methods: {
-    clearData(){
-      this.$router.go(0)
+    clearData() {
+      this.$router.go(0);
       // this.$forceUpdate()
     },
     draw() {
@@ -117,30 +122,29 @@ export default {
     },
     async getpower() {
       let post_data = {
-        rack: this.rack
-      }
-      const {data:ret} = await getPower({
+        rack: this.rack,
+      };
+      const { data: ret } = await getPower({
         url: "/power/",
         method: "post",
         data: post_data,
-      })
-      if(ret.code === 1111 ) {
+      });
+      if (ret.code === 1111) {
         Message({
           message: ret.msg,
-          type: "warning"
-        })
-      }
-      else {
-      this.power_option.series[0].name = this.rack + '电量峰值'
-      // this.power_option.xAxis.data = Object.keys(ret[this.rack])
-      this.power_option.xAxis.data = []
-      this.power_option.series[0].data =  []
-      for (const [key,value] of Object.entries(ret[this.rack])){
-        // console.log(`${key}: ${value}`)
-        this.power_option.series[0].data.push(`${value}`)
-        this.power_option.xAxis.data.push(`${key}`)
-      }
-      this.draw()
+          type: "warning",
+        });
+      } else {
+        this.power_option.series[0].name = this.rack + "电量峰值";
+        // this.power_option.xAxis.data = Object.keys(ret[this.rack])
+        this.power_option.xAxis.data = [];
+        this.power_option.series[0].data = [];
+        for (const [key, value] of Object.entries(ret[this.rack])) {
+          // console.log(`${key}: ${value}`)
+          this.power_option.series[0].data.push(`${value}`);
+          this.power_option.xAxis.data.push(`${key}`);
+        }
+        this.draw();
       }
     },
   },
@@ -157,11 +161,14 @@ export default {
 }
 .header {
   margin: 0 auto;
-  width: 400px;
+  width: 500px;
 }
 .power {
   height: 530px;
   width: 100%;
   background-color: darkcyan;
+}
+.upload {
+  float: right;
 }
 </style>
