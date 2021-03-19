@@ -29,7 +29,7 @@ export default {
   name: "power",
   data() {
     return {
-      url: "http://127.0.0.1:8000/be/upload/",
+      url: "http://netpm.yunshanmeicai.com/be/upload/",
       rack: "",
       power_option: {
         color: ["#00f2f1", "#ed3f35"],
@@ -113,8 +113,15 @@ export default {
 
   methods: {
     clearData() {
-      this.$router.go(0);
+      // this.$router.go(0);
       // this.$forceUpdate()
+      if(!this.rack){
+        this.power_option.xAxis.data = [];
+        this.power_option.series[0].data = [];
+        this.power_option.series[0].name = '';
+        this.draw()
+      }
+
     },
     draw() {
       this.power = echarts.init(this.$refs.power);

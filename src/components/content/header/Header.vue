@@ -14,7 +14,7 @@
     <el-menu-item index="/acl/">acl</el-menu-item>
     <el-menu-item index="/dashboard/">dashboard</el-menu-item>
     <el-menu-item index="/power/">power</el-menu-item>
-    <el-menu-item index="/netdevice/">netdevice</el-menu-item>
+    <!-- <el-menu-item index="/netdevice/">netdevice</el-menu-item> -->
     <el-submenu index="1">
       <template slot="title">友情链接</template>
       <el-menu-item index="" @click="See01">流量气象图</el-menu-item>

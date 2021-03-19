@@ -625,6 +625,7 @@ export default {
       if (!this.bwbgpDate) {
         this.bgp_pd_option.xAxis[0].data = [];
         this.bgp_pd_option.series[0].data = [];
+        // this.draw()
       }
     },
     cuclear() {
