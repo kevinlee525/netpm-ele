@@ -26,7 +26,7 @@ import { Message } from "element-ui";
 import echarts from "plugins/echarts";
 import { getPower } from "network/power/power";
 export default {
-  name: "power",
+  name: "trend",
   data() {
     return {
       url: "http://netpm.yunshanmeicai.com/be/upload/",

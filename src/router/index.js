@@ -11,7 +11,8 @@ import Arp from 'views/arp/Arp'
 import DashBoard from 'views/dashboard/DashBoard'
 import Acl from 'views/acl/Acl'
 import NetDevice from 'views/netdevice/NetDevice'
-import Power from 'views/power/Power'
+import Trend from 'views/power/Trend'
+import Pie from 'views/power/Pie'
 Vue.use(VueRouter);
 
 const routes = [
@@ -46,9 +47,9 @@ const routes = [
     component:NetDevice,
   },
   {
-    path:'/power/',
-    name:'power',
-    component:Power,
+    path:'/trend/',
+    name:'trend',
+    component:Trend,
     // beforeEnter:(to,from,next) => {
       // if (document.cookie.match('ldap')){
         // next()
@@ -61,6 +62,11 @@ const routes = [
       // next('https://sso.yunshanmeicai.com/index.php/user/login')
     // }
   },
+  {
+    path:'/pie/',
+    name:'pie',
+    component:Pie
+  }
 
 ];
 
