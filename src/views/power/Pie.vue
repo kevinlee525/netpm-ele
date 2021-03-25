@@ -45,6 +45,7 @@
 
 <script>
 import echarts from "plugins/echarts";
+import { getPower } from "network/power/power";
 export default {
   name: "pie",
   data() {
@@ -73,11 +74,7 @@ export default {
             type: "pie",
             radius: "55%",
             center: ["50%", "60%"],
-            data: [
-              { name: "Overpower", value: "5" },
-              { name: "Normal", value: "80" },
-              { name: "Spare", value: "15" },
-            ],
+            data: [],
             emphasis: {
               itemStyle: {
                 shadowBlur: 10,
@@ -89,8 +86,8 @@ export default {
         ],
       },
       pie: null,
-      overpower:[],
-      spare:[],
+      overpower: [],
+      spare: [],
     };
   },
   methods: {
@@ -104,9 +101,32 @@ export default {
     rowClass() {
       return "text-align: center;";
     },
+    async getlatest() {
+      const { data: ret } = await getPower({
+        url: "/latest/",
+        method: "get",
+      });
+      const { Overpower_list, Spare_list, Rack_num } = ret;
+      this.overpower = Overpower_list;
+      this.spare = Spare_list;
+      const data = [
+        { name: "Overpower", value: Overpower_list.length },
+        {
+          name: "Normal",
+          value:
+            Rack_num * 1 - Overpower_list.length * 1 - Spare_list.length * 1,
+        },
+        { name: "Spare", value: Spare_list.length },
+      ];
+      this.pie_options.series[0].data = data;
+      this.draw();
+    },
+  },
+  created() {
+    this.getlatest();
   },
   mounted() {
-    // this.draw()
+    // this.draw();
   },
 };
 </script>
@@ -135,9 +155,9 @@ span {
   font-size: 150%;
 }
 .spare {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 .normal {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 </style>
