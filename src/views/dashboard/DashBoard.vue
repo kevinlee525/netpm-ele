@@ -2,10 +2,10 @@
   <div class="mainbox">
     <div class="left">
       <div class="panel bar">
-        <h2>DC01-BGP-PD</h2>
+        <h2>DC01-CM-PD</h2>
         <div style="color: white; text-align: center">
           <el-date-picker
-            v-model="bwbgpDate"
+            v-model="bwcmDate"
             type="daterange"
             range-separator="至"
             start-placeholder="开始日期"
@@ -14,14 +14,14 @@
             style="width: 230px"
             value-format="yyyy-MM-dd"
             :picker-options="pickerOptions"
-            @change="bgpclear()"
+            @change="cmclear()"
           >
           </el-date-picker>
           <el-button
             size="mini"
             type="danger"
-            :disabled="buttonbgp"
-            @click="getbgpData"
+            :disabled="buttoncm"
+            @click="getcmData"
             style="margin-left: 3px"
             >提交
           </el-button>
@@ -183,6 +183,11 @@ export default {
         return true;
       } else false;
     },
+    buttoncm() {
+      if (!this.bwcmDate) {
+        return true;
+      } else false;
+    },
   },
   data() {
     return {
@@ -190,6 +195,7 @@ export default {
       bwcuDate: "",
       bwtelDate: "",
       bwbgpeDate: "",
+      bwcmDate:"",
       pickerOptions: {
         disabledDate(time) {
           return time.getTime() > Date.now();
@@ -270,6 +276,81 @@ export default {
         ],
       },
       bgp_pd: null,
+      cm_pd_option: {
+        color: ["#2f89cf"],
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+            // 坐标轴指示器，坐标轴触发有效
+            type: "shadow", // 默认为直线，可选为：'line' | 'shadow'
+          },
+        },
+        grid: {
+          top: "10%",
+          left: "0%",
+          right: "0%",
+          bottom: "4%",
+          containLabel: true,
+        },
+        xAxis: [
+          {
+            type: "category",
+            data: [],
+            // data: this.$store.state.bgp_pd_xAxis,
+            axisTick: {
+              alignWithLabel: true,
+            },
+            axisLabel: {
+              color: "rgba(255,255,255,.6)",
+              fontSize: "12",
+            },
+            axisLine: {
+              show: false,
+              // 如果想要设置单独的线条样式
+              // lineStyle: {
+              //     color: "rgba(255,255,255,.1)",
+              //     width: 1,
+              //     type: "solid"
+              // }
+            },
+          },
+        ],
+        yAxis: [
+          {
+            type: "value",
+            axisLabel: {
+              textStyle: {
+                color: "rgba(255,255,255,.6)",
+                fontSize: 12,
+              },
+            },
+            axisLine: {
+              lineStyle: {
+                color: "rgba(255,255,255,.1)",
+              },
+            },
+            splitLine: {
+              lineStyle: {
+                color: "rgba(255,255,255,.1)",
+              },
+            },
+          },
+        ],
+        series: [
+          {
+            name: "峰值带宽",
+            type: "bar",
+            barWidth: "35%",
+            // data: this.$store.state.dc01_bgp_pd,
+            data: [],
+            itemStyle: {
+              // 修改柱子圆角
+              barBorderRadius: 5,
+            },
+          },
+        ],
+      },
+      cm_pd: null,
       cu_pd_option: {
         color: ["#00f2f1", "#ed3f35"],
         tooltip: {
@@ -486,14 +567,16 @@ export default {
   },
   methods: {
     draw() {
-      this.bgp_pd = echarts.init(this.$refs.leftBar);
-      this.bgp_pd.setOption(this.bgp_pd_option, true);
+      // this.bgp_pd = echarts.init(this.$refs.leftBar);
+      // this.bgp_pd.setOption(this.bgp_pd_option, true);
+      this.cm_pd = echarts.init(this.$refs.leftBar);
+      this.cm_pd.setOption(this.cm_pd_option, true);
       this.cu_pd = echarts.init(this.$refs.leftLine);
       this.cu_pd.setOption(this.cu_pd_option, true);
       this.tel_pd = echarts.init(this.$refs.rightBar);
       this.tel_pd.setOption(this.tel_pd_option);
       this.bgpe = echarts.init(this.$refs.rightLine);
-      // this.bgpe.setOption(this.bgpe_option);
+      this.bgpe.setOption(this.bgpe_option);
     },
     async getbgpData() {
       const loading = this.$loading({
@@ -522,6 +605,39 @@ export default {
       });
       this.bgp_pd_option.xAxis[0].data = date_arr;
       this.bgp_pd_option.series[0].data = bw_arr;
+      if (bw_arr.length > 0) {
+        loading.close();
+      }
+      // this.$store.commit('udXaxis',tmp_arr)
+      // console.log(ret);
+    },
+    async getcmData() {
+      const loading = this.$loading({
+        lock: true,
+        text: "拼命加载中,请稍后...",
+        spinner: "el-icon-loading",
+        background: "rgba(0, 0, 0, 0.4)",
+        target: this.$refs.leftBar,
+      });
+      let Datebj = {
+        start: this.bwcmDate[0],
+        stop: this.bwcmDate[1],
+        isp: "cm",
+      };
+      const { data: ret } = await getBW({
+        url: "/bw/",
+        method: "post",
+        data: Datebj,
+      });
+      let date_arr = [];
+      let bw_arr = [];
+      ret.forEach((item) => {
+        date_arr.push(item["day"]);
+        bw_arr.push(item["value"] );
+        // bw_arr.push(item['value'])
+      });
+      this.cm_pd_option.xAxis[0].data = date_arr;
+      this.cm_pd_option.series[0].data = bw_arr;
       if (bw_arr.length > 0) {
         loading.close();
       }
@@ -634,6 +750,12 @@ export default {
         this.cu_pd_option.series[0].data = [];
       }
     },
+    cmclear() {
+      if (!this.bwcmDate) {
+        this.cm_pd_option.xAxis.data = [];
+        this.cm_pd_option.series[0].data = [];
+      }
+    },
     telclear() {
       if (!this.bwtelDate) {
         this.tel_pd_option.xAxis[0].data = [];
@@ -697,6 +819,20 @@ export default {
             this.bgpe.setOption(newVal);
           } else {
             this.bgpe.setOption(oldVal);
+          }
+        } else {
+          this.draw();
+        }
+      },
+      deep: true,
+    },
+    cm_pd_option: {
+      handler(newVal, oldVal) {
+        if (this.cm_pd) {
+          if (newVal) {
+            this.cm_pd.setOption(newVal);
+          } else {
+            this.cm_pd.setOption(oldVal);
           }
         } else {
           this.draw();

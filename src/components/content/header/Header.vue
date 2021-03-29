@@ -17,7 +17,7 @@
     <el-submenu index="1">
       <template slot="title">power</template>
       <el-menu-item index="/trend/">单机柜趋势图</el-menu-item>
-      <el-menu-item index="/pie/">整机房机柜饼图</el-menu-item>
+      <!-- <el-menu-item index="/pie/">整机房机柜饼图</el-menu-item> -->
     </el-submenu>
     <el-submenu index="2">
       <template slot="title">友情链接</template>
