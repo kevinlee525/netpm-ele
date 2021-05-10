@@ -13,61 +13,75 @@ import Acl from 'views/acl/Acl'
 import NetDevice from 'views/netdevice/NetDevice'
 import Trend from 'views/power/Trend'
 import Pie from 'views/power/Pie'
+import Budget from 'views/budget/Budget'
+import BudegetDetail from 'views/budget/BudgetDetail'
 Vue.use(VueRouter);
 
-const routes = [
-  {
+const routes = [{
     path: '/',
     // redirect:'/dashboard',
-    redirect:'/arp/',
+    redirect: '/arp/',
   },
   {
-    path:'/dashboard/',
-    name:'dashboard',
-    component:DashBoard
+    path: '/dashboard/',
+    name: 'dashboard',
+    component: DashBoard
   },
   {
     path: '/arp/',
     name: 'arp',
-    component:Arp
+    component: Arp
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   },
   {
-    path:'/acl/',
-    name:'acl',
-    component:Acl,
+    path: '/acl/',
+    name: 'acl',
+    component: Acl,
   },
   {
-    path:'/netdevice/',
+    path: '/netdevice/',
     // redirect:'/dashboard/',
-    name:'netdevice',
-    component:NetDevice,
+    name: 'netdevice',
+    component: NetDevice,
   },
   {
-    path:'/trend/',
-    name:'trend',
-    component:Trend,
+    path: '/trend/',
+    name: 'trend',
+    component: Trend,
     // beforeEnter:(to,from,next) => {
-      // if (document.cookie.match('ldap')){
-        // next()
-      // }
-      // else{
-        // window.open('https://sso.yunshanmeicai.com/index.php/user/login',"_self")
-      // }
-      // console.log(to)
-      // console.log(from)
-      // next('https://sso.yunshanmeicai.com/index.php/user/login')
+    // if (document.cookie.match('ldap')){
+    // next()
+    // }
+    // else{
+    // window.open('https://sso.yunshanmeicai.com/index.php/user/login',"_self")
+    // }
+    // console.log(to)
+    // console.log(from)
+    // next('https://sso.yunshanmeicai.com/index.php/user/login')
     // }
   },
   {
-    path:'/pie/',
-    name:'pie',
-    component:Pie
+    path: '/pie/',
+    name: 'pie',
+    component: Pie
+  },
+  {
+    path: '/budget/',
+    name: 'budget',
+    component: Budget
+  },
+  {
+    path:'/budget/:tier1/',
+    name:'budgetdetail',
+    component:BudegetDetail
   }
-
+  // {
+  //   path:'/budget/:tier2/:tier3'
+  // 子路由通过 this.$route.params.num 的形式来获取父路由向子路由传递过来的参数
+  // }
 ];
 
 const router = new VueRouter({

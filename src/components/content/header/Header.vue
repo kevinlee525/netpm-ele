@@ -13,11 +13,12 @@
     <el-menu-item index="/arp/">arp</el-menu-item>
     <el-menu-item index="/acl/">acl</el-menu-item>
     <el-menu-item index="/dashboard/">dashboard</el-menu-item>
+    <el-menu-item index="/budget/">budget</el-menu-item>
     <!-- <el-menu-item index="/netdevice/">netdevice</el-menu-item> -->
     <el-submenu index="1">
       <template slot="title">power</template>
       <el-menu-item index="/trend/">单机柜趋势图</el-menu-item>
-      <!-- <el-menu-item index="/pie/">整机房机柜饼图</el-menu-item> -->
+      <el-menu-item index="/pie/">整机房机柜饼图</el-menu-item>
     </el-submenu>
     <el-submenu index="2">
       <template slot="title">友情链接</template>
@@ -45,6 +46,7 @@ export default {
         { name: "acl", path: "/acl/" },
         { name: "netdevice", path: "/netdevice/" },
         { name: "power", path: "/power/" },
+        { name: "budget", path: "/budget/" },
       ],
     };
   },
