@@ -41,4 +41,7 @@ export function getCookie() {
     }
     else {return null}
 }
+export function initSeries() {
+    return 'haha'
+}
 

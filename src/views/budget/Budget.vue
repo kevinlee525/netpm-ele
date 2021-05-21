@@ -11,12 +11,12 @@
             <el-table
               :data="budgetInfo"
               border
-              height="200px"
               :cell-style="rowClass"
               :header-cell-style="headClass"
               style="width: 100%"
+              height="500px"
             >
-              <el-table-column prop="department" label="depart"> </el-table-column>
+              <el-table-column prop="name" label="depart"> </el-table-column>
               <el-table-column prop="value" label="value"> </el-table-column>
               <el-table-column fixed="right" label="操作">
                 <template slot-scope="scope">
@@ -39,6 +39,7 @@
 
 <script>
 import echarts from "plugins/echarts";
+import { getBudget } from "network/budget/budget";
 export default {
   name: "Budget",
   data() {
@@ -68,10 +69,7 @@ export default {
             type: "pie",
             radius: "55%",
             center: ["50%", "60%"],
-            data: [
-              { name: "BigCustomer", value: "46" },
-              { name: "Technology", value: "88" },
-            ],
+            data: [],
             emphasis: {
               itemStyle: {
                 shadowBlur: 10,
@@ -83,10 +81,7 @@ export default {
         ],
       },
       budget: null,
-      budgetInfo: [
-        {department:'BigCustomer',value:'46'},
-        {department:'Technology',value:'88'}
-      ],
+      budgetInfo: [],
     };
   },
   methods: {
@@ -100,15 +95,23 @@ export default {
     rowClass() {
       return "text-align: center;";
     },
-    querydetail(row){
-      console.log(row.department)
-      console.log(row.value)
-      this.$router.push('/budget/'+ row.department + '/')
-    }
-
+    querydetail(row) {
+      // console.log(row.code)
+      this.$router.push("/budget/" + row.code + "/");
+    },
+    async getbudget() {
+      const { data: ret } = await getBudget({
+        url: "/budget/",
+        method: "get",
+      });
+      this.budget_options.series[0].data = ret;
+      this.budgetInfo = ret;
+      this.draw();
+    },
   },
-  mounted() {
-    this.draw();
+  mounted() {},
+  created() {
+    this.getbudget();
   },
 };
 </script>
@@ -137,7 +140,7 @@ export default {
 span {
   font-size: 150%;
 }
-/* .detail {
-  height: 500px;
-} */
+/* .detail { */
+  /* height: 800px; */
+/* } */
 </style>
