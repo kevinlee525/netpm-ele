@@ -16,8 +16,13 @@
               style="width: 100%"
               height="500px"
             >
-              <el-table-column prop="name" label="depart"> </el-table-column>
-              <el-table-column prop="value" label="value"> </el-table-column>
+              <el-table-column prop="name" label="三级部门"> </el-table-column>
+              <el-table-column prop="idc" label="IDC"> </el-table-column>
+              <el-table-column prop="ali" label="Ali"> </el-table-column>
+              <el-table-column prop="ks" label="KS"> </el-table-column>
+              <el-table-column prop="tx" label="TX"> </el-table-column>
+              <el-table-column prop="baishan" label="BaiShan">
+              </el-table-column>
               <el-table-column fixed="right" label="操作">
                 <template slot-scope="scope">
                   <el-button
@@ -52,13 +57,15 @@ export default {
         },
         tooltip: {
           trigger: "item",
-          //   formatter: "{a} <br/>{b} : {c} ({d}%)",
-          formatter: "{a} <br/>{b} : {d}%",
+            // formatter: "{b} : {c} ({d}%)",
+            // formatter: "{a} <br/>{b} : {c} ({d}%)",
+          formatter: "{b} : {d}%",
         },
         legend: {
           type: "scroll",
           orient: "vertical",
-          right: 10,
+          // right: 0,
+          left: "left",
           top: 20,
           bottom: 20,
           //   data: ["Technology", "BigCustomer"],
@@ -128,12 +135,12 @@ export default {
 }
 .left {
   float: left;
-  width: 600px;
+  width: 650px;
   height: 600px;
 }
 .right {
   float: right;
-  width: 700px;
+  width: 630px;
   height: 650px;
   /* background-color: lightgreen; */
 }
@@ -141,6 +148,6 @@ span {
   font-size: 150%;
 }
 /* .detail { */
-  /* height: 800px; */
+/* height: 800px; */
 /* } */
 </style>

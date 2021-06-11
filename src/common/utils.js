@@ -34,14 +34,32 @@ function padLeftZero(str) {
     return ('00' + str).substr(str.length)
 }
 export function getCookie() {
-    let  reg = /csrftoken=([\w]{60,})[;]?/; //不要加g 参数
-    let  cookies = document.cookie;
-    if(Boolean(cookies) && reg.test(cookies)){
+    let reg = /csrftoken=([\w]{60,})[;]?/; //不要加g 参数
+    let cookies = document.cookie;
+    if (Boolean(cookies) && reg.test(cookies)) {
         return reg.exec(cookies)[1]
+    } else {
+        return null
     }
-    else {return null}
 }
-export function initSeries() {
-    return 'haha'
+export function initSeries(info) {
+    let series = [];
+    for (let subdepartment of info.subdepart) {
+        let  base = {
+            name: '',
+            type: 'bar',
+            stack: 'total',
+            label: {
+                show: true
+            },
+            emphasis: {
+                focus: "series",
+            },
+            data: [],
+        };
+        base.name = subdepartment
+        base.data = info[subdepartment]
+        series.push(base)
+    }
+    return series
 }
-
