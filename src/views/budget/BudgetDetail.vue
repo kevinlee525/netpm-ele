@@ -217,11 +217,16 @@ export default {
     async getdetailbudget() {
       const { data: ret } = await getBudget({
         url: "/budget/",
-        method: "get",
-        params: {
-          department: this.$route.params.tier1,
-        },
+        method: "post",
+        // params: {
+          // department: this.$route.params.tier1,
+        // },
+        data:{
+          date:this.$route.params.month,
+          department: this.$route.params.tier1
+        }
       });
+      // console.log(this.$route.params)
       const info = ret.info;
       this.title = info.title;
       this.idc_options.series[0].data = info.idc;
@@ -229,8 +234,6 @@ export default {
       this.ks_options.series[0].data = info.ks;
       this.tx_options.series[0].data = info.tx;
       this.baishan_options.series[0].data = info.baishan;
-      // const result = initSeries(info);
-      // this.detail_options.series = result;
       this.draw();
     },
   },

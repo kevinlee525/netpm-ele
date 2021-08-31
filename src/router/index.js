@@ -74,7 +74,7 @@ const routes = [{
     component: Budget
   },
   {
-    path:'/budget/:tier1/',
+    path:'/budget/:tier1/:month/',
     name:'budgetdetail',
     component:BudegetDetail
   }

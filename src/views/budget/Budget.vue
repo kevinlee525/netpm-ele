@@ -1,10 +1,29 @@
 <template>
   <div class="budget">
-    <div class="left" ref="left"></div>
+    <div class="Left">
+      <div class="month">
+        <el-select
+          v-model="value"
+          clearable
+          placeholder="请选择查看月份"
+          @clear="rmdata"
+        >
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+        <el-button type="primary" @click="getmonthbudget">提交</el-button>
+      </div>
+      <div class="left" ref="left"></div>
+    </div>
     <div class="right">
       <el-card shadow="hover">
         <div slot="header" class="clearfix">
-          <span>预算详情</span>
+          <span>分布详情</span>
         </div>
         <div>
           <div class="detail">
@@ -16,7 +35,7 @@
               style="width: 100%"
               height="500px"
             >
-              <el-table-column prop="name" label="三级部门"> </el-table-column>
+              <el-table-column prop="name" label="二级部门"> </el-table-column>
               <el-table-column prop="idc" label="IDC"> </el-table-column>
               <el-table-column prop="ali" label="Ali"> </el-table-column>
               <el-table-column prop="ks" label="KS"> </el-table-column>
@@ -45,31 +64,32 @@
 <script>
 import echarts from "plugins/echarts";
 import { getBudget } from "network/budget/budget";
+import { Message } from "element-ui";
 export default {
   name: "Budget",
   data() {
     return {
       budget_options: {
-        title: {
-          text: "MC-Budget",
-          //   subtext: "最近一周的数据",
-          left: "center",
-        },
+        // title: {
+        // text: "美菜成本分布",
+        //   subtext: "最近一周的数据",
+        // left: "center",
+        // },
         tooltip: {
           trigger: "item",
-            // formatter: "{b} : {c} ({d}%)",
-            // formatter: "{a} <br/>{b} : {c} ({d}%)",
+          // formatter: "{b} : {c} ({d}%)",
+          // formatter: "{a} <br/>{b} : {c} ({d}%)",
           formatter: "{b} : {d}%",
         },
-        legend: {
-          type: "scroll",
-          orient: "vertical",
-          // right: 0,
-          left: "left",
-          top: 20,
-          bottom: 20,
-          //   data: ["Technology", "BigCustomer"],
-        },
+        // legend: {
+        // type: "scroll",
+        // orient: "vertical",
+        // right: 0,
+        // left: "left",
+        // top: 20,
+        // bottom: 20,
+        //   data: ["Technology", "BigCustomer"],
+        // },
         series: [
           {
             name: "MC-Budget",
@@ -89,6 +109,16 @@ export default {
       },
       budget: null,
       budgetInfo: [],
+      options: [
+        { value: "202107", label: "202107" },
+        { value: "202108", label: "202108" },
+        // {value:'202109',label:'202109'},
+        // {value:'202110',label:'202110'},
+        // {value:'202111',label:'202111'},
+        // {value:'202112',label:'202112'},
+        // {value:'202201',label:'202201'},
+      ],
+      value: "",
     };
   },
   methods: {
@@ -104,21 +134,48 @@ export default {
     },
     querydetail(row) {
       // console.log(row.code)
-      this.$router.push("/budget/" + row.code + "/");
+      this.$router.push("/budget/" + row.code + "/" + this.value + "/");
     },
-    async getbudget() {
+    async getmonthbudget() {
+      // Message({
+      // message: "开发中...待上线",
+      // type: "warning",
+      // });
       const { data: ret } = await getBudget({
         url: "/budget/",
-        method: "get",
+        method: "post",
+        data: {
+          month: this.value,
+        },
       });
       this.budget_options.series[0].data = ret;
       this.budgetInfo = ret;
       this.draw();
     },
+    rmdata() {
+      this.budget_options.series[0].data = [];
+      this.budgetInfo = [];
+    },
   },
   mounted() {},
   created() {
-    this.getbudget();
+    // this.getbudget();
+  },
+  watch: {
+    budget_options: {
+      handler(newVal, oldVal) {
+        if (this.budget) {
+          if (newVal) {
+            this.budget.setOption(newVal);
+          } else {
+            this.budget.setOption(oldVal);
+          }
+        } else {
+          this.draw();
+        }
+      },
+      deep: true,
+    },
   },
 };
 </script>
@@ -133,8 +190,21 @@ export default {
   bottom: 45px;
   background-color: #ffffff;
 }
-.left {
+.Left {
   float: left;
+  width: 650px;
+  height: 650px;
+  /* text-align: center; */
+}
+.month {
+  z-index: 1000;
+  position: absolute;
+  left: 220px;
+}
+.left {
+  position: absolute;
+  left: 0;
+  top: -50px;
   width: 650px;
   height: 600px;
 }
