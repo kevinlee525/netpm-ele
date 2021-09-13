@@ -2,13 +2,6 @@
   <div class="detail">
     <div class="title">{{ title }}</div>
     <div class="box">
-      <div class="parent">
-        <div class=child>IDC</div>
-        <div class=child>ALi</div>
-        <div class=child>KS</div>
-        <div class=child>TX</div>
-        <div class=child>BaiShan</div>
-      </div>
       <div class="idc" ref="idc"></div>
       <div class="ali" ref="ali"></div>
       <div class="ks" ref="ks"></div>
@@ -28,11 +21,24 @@ export default {
     return {
       title: "",
       idc_options: {
+        title: {
+          text: "IDC",
+          //   subtext: "最近一周的数据",
+          left: "center",
+        },
         tooltip: {
           trigger: "item",
           // formatter: "{b} : {c} ({d}%)",
           // formatter: "{a} <br/>{b} : {c} ({d}%)",
           formatter: "{b} : {d}%",
+        },
+        legend: {
+          type: "scroll",
+          // orient: "horizontal",
+          orient: "vertical",
+          // right: 0,
+          left: "left",
+          top: 20,
         },
         series: [
           {
@@ -53,11 +59,21 @@ export default {
       },
       idc: null,
       ali_options: {
+        title: {
+          text: "Ali",
+          left: "center",
+        },
         tooltip: {
           trigger: "item",
           // formatter: "{b} : {c} ({d}%)",
           // formatter: "{a} <br/>{b} : {c} ({d}%)",
           formatter: "{b} : {d}%",
+        },
+        legend: {
+          type: "scroll",
+          orient: "vertical",
+          left: "left",
+          top: 20,
         },
         series: [
           {
@@ -78,11 +94,22 @@ export default {
       },
       ali: null,
       ks_options: {
+        title: {
+          text: "KS",
+          left: "center",
+        },
         tooltip: {
           trigger: "item",
           // formatter: "{b} : {c} ({d}%)",
           // formatter: "{a} <br/>{b} : {c} ({d}%)",
           formatter: "{b} : {d}%",
+        },
+        legend: {
+          type: "scroll",
+          orient: "vertical",
+          left: "left",
+          top: 20,
+          bottom: 20,
         },
         series: [
           {
@@ -103,11 +130,21 @@ export default {
       },
       ks: null,
       tx_options: {
+        title: {
+          text: "TX",
+          left: "center",
+        },
         tooltip: {
           trigger: "item",
           // formatter: "{b} : {c} ({d}%)",
           // formatter: "{a} <br/>{b} : {c} ({d}%)",
           formatter: "{b} : {d}%",
+        },
+        legend: {
+          type: "scroll",
+          orient: "vertical",
+          left: "left",
+          top: 20,
         },
         series: [
           {
@@ -128,11 +165,21 @@ export default {
       },
       tx: null,
       baishan_options: {
+        title: {
+          text: "Baishan",
+          left: "center",
+        },
         tooltip: {
           trigger: "item",
           // formatter: "{b} : {c} ({d}%)",
           // formatter: "{a} <br/>{b} : {c} ({d}%)",
           formatter: "{b} : {d}%",
+        },
+        legend: {
+          type: "scroll",
+          orient: "vertical",
+          left: "left",
+          top: 20,
         },
         series: [
           {
@@ -224,44 +271,25 @@ export default {
   float: left;
   width: 260px;
   height: 550px;
-  margin-top: -150px;
-  /* z-index: 1000; */
 }
 .ali {
   float: left;
   width: 260px;
   height: 550px;
-  margin-top: -150px;
 }
 .ks {
   float: left;
   width: 260px;
   height: 550px;
-  margin-top: -150px;
 }
 .tx {
   float: left;
   width: 260px;
   height: 550px;
-  margin-top: -150px;
 }
 .baishan {
   float: left;
   width: 265px;
   height: 550px;
-  margin-top: -150px;
 }
-.parent {
-  display: flex;
-  margin-top: 60px;
-}
-.child {
-  flex:1;
-  height: 25px;
-  text-align: center;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 150%;
-  /* color: darkorange; */
-}
-
 </style>
