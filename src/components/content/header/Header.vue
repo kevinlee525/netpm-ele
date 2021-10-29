@@ -13,7 +13,7 @@
     <el-menu-item index="/arp/">arp</el-menu-item>
     <el-menu-item index="/acl/">acl</el-menu-item>
     <el-menu-item index="/dashboard/">dashboard</el-menu-item>
-    <el-menu-item index="/budget/">budget</el-menu-item>
+    <el-menu-item index="/budget/">capex</el-menu-item>
     <!-- <el-menu-item index="/netdevice/">netdevice</el-menu-item> -->
     <el-submenu index="1">
       <template slot="title">power</template>
@@ -46,7 +46,7 @@ export default {
         { name: "acl", path: "/acl/" },
         { name: "netdevice", path: "/netdevice/" },
         { name: "power", path: "/power/" },
-        { name: "budget", path: "/budget/" },
+        { name: "capex", path: "/budget/" },
       ],
     };
   },

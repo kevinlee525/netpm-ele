@@ -48,9 +48,12 @@
                     @click.native.prevent="querydetail(scope.row)"
                     type="warning"
                     size="small"
-                  >
-                    查看详细
-                  </el-button>
+                    >成本明细</el-button>
+                  <el-button
+                    @click.native.prevent="queryresource(scope.row)"
+                    type="success"
+                    size="small"
+                    >资源明细</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -111,14 +114,15 @@ export default {
       budgetInfo: [],
       options: [
         { value: "202107", label: "202107" },
-        // { value: "202108", label: "202108" },
-        // {value:'202109',label:'202109'},
+        { value: "202108", label: "202108" },
+        { value: "202109", label: "202109" },
         // {value:'202110',label:'202110'},
         // {value:'202111',label:'202111'},
         // {value:'202112',label:'202112'},
         // {value:'202201',label:'202201'},
       ],
       value: "",
+      currentMonth: "",
     };
   },
   methods: {
@@ -150,16 +154,40 @@ export default {
       });
       this.budget_options.series[0].data = ret;
       this.budgetInfo = ret;
+      this.currentMonth = this.value;
+      this.draw();
+    },
+    async getlatestmonthbudget() {
+      const { data: ret } = await getBudget({
+        url: "/budget/",
+        method: "post",
+        data: {
+          month: this.currentMonth,
+        },
+      });
+      this.budget_options.series[0].data = ret;
+      this.budgetInfo = ret;
       this.draw();
     },
     rmdata() {
       this.budget_options.series[0].data = [];
       this.budgetInfo = [];
+      this.currentMonth = "";
+    },
+    queryresource(row) {
+      // console.log(row.code);
+      // this.$router.push("/resource/" + row.code + "/" + this.value + "/");
+      this.$router.push("/resource/" + row.code);
     },
   },
   mounted() {},
   created() {
-    // this.getbudget();
+    let dt = new Date();
+    var y = dt.getFullYear();
+    var mt = dt.getMonth() + "";
+    this.currentMonth = y + mt.padStart(2, "0");
+    this.value = this.currentMonth;
+    this.getlatestmonthbudget();
   },
   watch: {
     budget_options: {
@@ -210,14 +238,14 @@ export default {
 }
 .right {
   float: right;
-  width: 630px;
+  width: 650px;
   height: 650px;
   /* background-color: lightgreen; */
 }
 span {
   font-size: 150%;
 }
-/* .detail { */
-/* height: 800px; */
-/* } */
+.el-button+.el-button {
+  margin-left: 0;
+}
 </style>
