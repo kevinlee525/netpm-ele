@@ -15,8 +15,7 @@ import Trend from 'views/power/Trend'
 import Pie from 'views/power/Pie'
 import Budget from 'views/budget/Budget'
 import BudegetDetail from 'views/budget/BudgetDetail'
-import Resource from 'views/resource/Resource'
-import ResourceDetail from 'views/resource/ResourceDetail'
+import Useratio from 'views/useratio/Useratio'
 Vue.use(VueRouter);
 
 const routes = [{
@@ -70,26 +69,26 @@ const routes = [{
     name: 'pie',
     component: Pie
   },
-  {
-    path: '/budget/',
-    name: 'budget',
-    component: Budget
-  },
-  {
-    path: '/budget/:tier1/:month/',
-    name: 'budgetdetail',
-    component: BudegetDetail
-  },
-  {
-    path: '/resource/:tier1',
-    name: 'resource',
-    component: Resource
-  },
-  {
-    path: '/resource/:tier1/:tier2/',
-    name: 'resourcedetail',
-    component: ResourceDetail
-  },
+  // {
+  //   path: '/budget/',
+  //   name: 'budget',
+  //   component: Budget
+  // },
+  // {
+  //   path: '/budget/:tier1/:month/',
+  //   name: 'budgetdetail',
+  //   component: BudegetDetail
+  // },
+  // {
+  //   path: '/useratio/',
+  //   name: 'useratio',
+  //   component: Useratio
+  // },
+  // {
+  //   path: '/resource/:tier1/:tier2/',
+  //   name: 'resourcedetail',
+  //   component: ResourceDetail
+  // },
   // {
   //   path:'/budget/:tier2/:tier3'
   // 子路由通过 this.$route.params.num 的形式来获取父路由向子路由传递过来的参数

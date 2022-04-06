@@ -25,7 +25,7 @@
         @clear="getinfo()"
       >
       </el-input>
-      <el-button type="primary" @click="search()">搜索</el-button>
+      <el-button type="primary" :disabled="btnCtl" @click="search()">搜索</el-button>
     </div>
     <el-table
       :data="tableData"
@@ -73,6 +73,15 @@ import { getNetdevice } from "network/netdevice/netdevice";
 import { Message } from "element-ui";
 export default {
   name: "netdevice",
+  computed:{
+    btnCtl(){
+      if(!this.hostname && !this.mgt_ip && !this.pd_net) {
+        return true
+      }else {
+        return false
+      }
+    }
+  },
   data() {
     return {
       tableData: [],

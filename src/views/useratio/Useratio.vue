@@ -1,5 +1,5 @@
 <template>
-  <div class="budget">
+  <div class="resource">
     <div class="Left">
       <div class="month">
         <el-select
@@ -16,7 +16,7 @@
           >
           </el-option>
         </el-select>
-        <el-button type="primary" @click="getmonthbudget">提交</el-button>
+        <el-button type="primary" @click="getmonthUseratio">提交</el-button>
       </div>
       <div class="left" ref="left"></div>
     </div>
@@ -28,7 +28,7 @@
         <div>
           <div class="detail">
             <el-table
-              :data="budgetInfo"
+              :data="resourceInfo"
               border
               :cell-style="rowClass"
               :header-cell-style="headClass"
@@ -36,24 +36,14 @@
               height="500px"
             >
               <el-table-column prop="name" label="二级部门"> </el-table-column>
-              <el-table-column prop="idc" label="IDC"> </el-table-column>
-              <el-table-column prop="ali" label="Ali"> </el-table-column>
-              <el-table-column prop="ks" label="KS"> </el-table-column>
-              <el-table-column prop="tx" label="TX"> </el-table-column>
-              <el-table-column prop="baishan" label="BaiShan">
-              </el-table-column>
+              <el-table-column prop="value" label="物理机"> </el-table-column>
               <el-table-column fixed="right" label="操作">
                 <template slot-scope="scope">
                   <el-button
-                    @click.native.prevent="querydetail(scope.row)"
-                    type="warning"
-                    size="small"
-                    >成本明细</el-button>
-                  <!-- <el-button
                     @click.native.prevent="queryresource(scope.row)"
                     type="success"
                     size="small"
-                    >资源明细</el-button> -->
+                    >资源明细</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -66,13 +56,13 @@
 
 <script>
 import echarts from "plugins/echarts";
-import { getBudget } from "network/budget/budget";
+import { getUseratio } from "network/useratio/useratio";
 import { Message } from "element-ui";
 export default {
-  name: "Budget",
+  name: "Resource",
   data() {
     return {
-      budget_options: {
+      resource_options: {
         // title: {
         // text: "美菜成本分布",
         //   subtext: "最近一周的数据",
@@ -95,7 +85,7 @@ export default {
         // },
         series: [
           {
-            name: "MC-Budget",
+            name: "MC-Resource",
             type: "pie",
             radius: "55%",
             center: ["50%", "60%"],
@@ -110,8 +100,8 @@ export default {
           },
         ],
       },
-      budget: null,
-      budgetInfo: [],
+      resource: null,
+      resourceInfo: [],
       options: [
         { value: "202107", label: "202107" },
         { value: "202108", label: "202108" },
@@ -127,8 +117,8 @@ export default {
   },
   methods: {
     draw() {
-      this.budget = echarts.init(this.$refs.left);
-      this.budget.setOption(this.budget_options, true);
+      this.resource = echarts.init(this.$refs.left);
+      this.resource.setOption(this.resource_options, true);
     },
     headClass() {
       return "text-align: center;background:#FFEC8B;color:red";
@@ -136,67 +126,65 @@ export default {
     rowClass() {
       return "text-align: center;";
     },
-    querydetail(row) {
-      // console.log(row.code)
-      this.$router.push("/budget/" + row.code + "/" + this.value + "/");
-    },
-    async getmonthbudget() {
+    async getmonthUseratio() {
       // Message({
       // message: "开发中...待上线",
       // type: "warning",
       // });
-      const { data: ret } = await getBudget({
-        url: "/budget/",
+      const { data: ret } = await getUseratio({
+        url: "/resource/",
         method: "post",
         data: {
           month: this.value,
         },
       });
-      this.budget_options.series[0].data = ret;
-      this.budgetInfo = ret;
-      this.currentMonth = this.value;
+      this.resource_options.series[0].data = ret;
+      this.resourceInfo = ret;
+      // this.currentMonth = this.value;
       this.draw();
     },
-    async getlatestmonthbudget() {
-      const { data: ret } = await getBudget({
-        url: "/budget/",
-        method: "post",
-        data: {
-          month: this.currentMonth,
-        },
-      });
-      this.budget_options.series[0].data = ret;
-      this.budgetInfo = ret;
-      this.draw();
-    },
+    // async getlatestmonthbudget() {
+    //   const { data: ret } = await getBudget({
+    //     url: "/budget/",
+    //     method: "post",
+    //     data: {
+    //       month: this.currentMonth,
+    //     },
+    //   });
+    //   this.budget_options.series[0].data = ret;
+    //   this.budgetInfo = ret;
+    //   this.draw();
+    // },
     rmdata() {
-      this.budget_options.series[0].data = [];
-      this.budgetInfo = [];
+      this.resource_options.series[0].data = [];
+      this.resourceInfo = [];
       this.currentMonth = "";
     },
-    // queryresource(row) {
-      // console.log(row.code);
+    queryresource(row) {
+      console.log(row.code);
       // this.$router.push("/resource/" + row.code + "/" + this.value + "/");
       // this.$router.push("/resource/" + row.code);
-    // },
+    },
   },
-  mounted() {},
+  mounted() {
+    this.getmonthUseratio()
+  },
   created() {
-    let dt = new Date();
-    var y = dt.getFullYear();
-    var mt = dt.getMonth() + "";
-    this.currentMonth = y + mt.padStart(2, "0");
-    this.value = this.currentMonth;
-    this.getlatestmonthbudget();
+    // let dt = new Date();
+    // var y = dt.getFullYear();
+    // var mt = dt.getMonth() + "";
+    // this.currentMonth = y + mt.padStart(2, "0");
+    // this.value = this.currentMonth;
+    // this.getlatestmonthbudget();
   },
   watch: {
-    budget_options: {
+    resource_options: {
       handler(newVal, oldVal) {
-        if (this.budget) {
+        if (this.resource) {
           if (newVal) {
-            this.budget.setOption(newVal);
+            this.resource.setOption(newVal);
           } else {
-            this.budget.setOption(oldVal);
+            this.resource.setOption(oldVal);
           }
         } else {
           this.draw();
@@ -210,7 +198,7 @@ export default {
 
 
 <style scoped>
-.budget {
+.resource {
   position: absolute;
   top: 20px;
   left: 20px;
@@ -244,8 +232,5 @@ export default {
 }
 span {
   font-size: 150%;
-}
-.el-button+.el-button {
-  margin-left: 0;
 }
 </style>

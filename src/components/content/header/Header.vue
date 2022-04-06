@@ -13,8 +13,9 @@
     <el-menu-item index="/arp/">arp</el-menu-item>
     <el-menu-item index="/acl/">acl</el-menu-item>
     <el-menu-item index="/dashboard/">dashboard</el-menu-item>
-    <el-menu-item index="/budget/">capex</el-menu-item>
-    <!-- <el-menu-item index="/netdevice/">netdevice</el-menu-item> -->
+    <!-- <el-menu-item index="/budget/">capex</el-menu-item> -->
+    <!-- <el-menu-item index="/useratio/">useratio</el-menu-item> -->
+    <el-menu-item index="/netdevice/">netdevice</el-menu-item>
     <el-submenu index="1">
       <template slot="title">power</template>
       <el-menu-item index="/trend/">单机柜趋势图</el-menu-item>
@@ -47,6 +48,7 @@ export default {
         { name: "netdevice", path: "/netdevice/" },
         { name: "power", path: "/power/" },
         { name: "capex", path: "/budget/" },
+        { name: "useratio", path: "/useratio/" },
       ],
     };
   },
