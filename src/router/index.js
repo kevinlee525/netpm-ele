@@ -13,6 +13,7 @@ import Acl from 'views/acl/Acl'
 import NetDevice from 'views/netdevice/NetDevice'
 import Trend from 'views/power/Trend'
 import Pie from 'views/power/Pie'
+import Webssh from 'views/webssh/Webssh'
 import Budget from 'views/budget/Budget'
 import BudegetDetail from 'views/budget/BudgetDetail'
 import Useratio from 'views/useratio/Useratio'
@@ -44,9 +45,13 @@ const routes = [{
   },
   {
     path: '/netdevice/',
-    // redirect:'/dashboard/',
     name: 'netdevice',
     component: NetDevice,
+  },
+  {
+    path: '/netdevice/:hostname/',
+    name: 'netdevie_webssh',
+    component: Webssh,
   },
   {
     path: '/trend/',
@@ -69,6 +74,11 @@ const routes = [{
     name: 'pie',
     component: Pie
   },
+  // {
+  //   path: '/webssh/',
+  //   name: 'webssh',
+  //   component: Webssh
+  // },
   // {
   //   path: '/budget/',
   //   name: 'budget',

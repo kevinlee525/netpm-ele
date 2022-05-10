@@ -7,6 +7,8 @@ import store from './store'
 import 'element-ui/lib/theme-chalk/index.css'
 import './plugins/element'
 
+import 'xterm/dist/xterm.css'
+
 Vue.config.productionTip = false
 
 new Vue({

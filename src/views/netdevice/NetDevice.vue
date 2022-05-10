@@ -124,7 +124,7 @@ export default {
       });
     },
     conn(row) {
-      console.log(row);
+      this.$router.push("/netdevice/" + row.hostname + "/")
     },
     // 表头样式设置
     headClass() {

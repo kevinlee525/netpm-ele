@@ -63,3 +63,7 @@ export function initSeries(info) {
     }
     return series
 }
+
+export function getMgtIP(hostname){
+    return  "10.9.255." + hostname.split(".")[0].split("-").pop()
+}
