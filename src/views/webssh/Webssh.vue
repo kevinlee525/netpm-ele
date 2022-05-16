@@ -1,10 +1,14 @@
 <template>
-    <div class="box">
-        用户名：<input v-model="username" type="text" placeholder="用户名">
-        密码: <input v-model="pwd" type="password" placeholder="密码">
-        <button @click="connect">提交</button>
+    <el-card class="box-card" shadow="hover">
+        <div slot="header" class="header">
+            <el-input style="width:150px" placeholder="请输入用户名" 
+            v-model="username" clearable></el-input>
+            <el-input style="width:150px" placeholder="请输入密码" 
+            v-model="pwd" clearable show-password ></el-input>
+            <el-button type="primary" @click="connect">连接</el-button>
+        </div>
         <div class="console" id="terminal"> </div>
-    </div>
+        </el-card>
 </template>
 
 <script>
@@ -28,8 +32,8 @@ export default {
     },
     methods: {
         get_term_size() {
-            var init_width = 9;
-            var init_height = 17;
+            var init_width = 9.5;
+            var init_height = 20;
 
             var windows_width = window.innerWidth;
             var windows_height = window.innerHeight;
@@ -123,20 +127,28 @@ export default {
 
 <style scoped>
 
-.box {
+.box-card {
     position:absolute;
-    top:20px;
-    left:20px;
-    right: 20px;
-    /* width: 1200px; */
-    height: 600px;
+    top:15px;
+    left:15px;
+    right: 15px;
+    height: 650px;
     background-color: #fff;
+}
+
+.header {
+    margin: 0 auto;
+    width: 700px;
 }
 
 .console {
     height: 300px;
     width: 200px;
     margin-top: 10px;
-    background-color: skyblue;
+    /* background-color: skyblue; */
+}
+.el-input {
+    margin-right: 40px;
+    margin-left: 40px;
 }
 </style>

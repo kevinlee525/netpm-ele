@@ -125,6 +125,7 @@ export default {
     },
     conn(row) {
       this.$router.push("/netdevice/" + row.hostname + "/")
+      // alert("待上线...")
     },
     // 表头样式设置
     headClass() {
